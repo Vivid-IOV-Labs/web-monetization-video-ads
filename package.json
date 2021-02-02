@@ -8,7 +8,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "prepublish:public": "npm run build && npm run bump-version",
-    "publish:public": "npm publish --access public"
+    "publish:public": "npm publish --access public",
+    "publish": "npm publish"
   },
   "keywords": [],
   "author": "",
