@@ -2,8 +2,9 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 import babel from "@rollup/plugin-babel";
 import pkg from "./package.json";
-import serve from 'rollup-plugin-serve';
-import livereload from 'rollup-plugin-livereload';
+import serve from "rollup-plugin-serve";
+import livereload from "rollup-plugin-livereload";
+import { eslint } from "rollup-plugin-eslint";
 
 const input = ["src/index.js"];
 export default [
@@ -11,21 +12,24 @@ export default [
     // UMD
     input,
     plugins: [
+      eslint({
+        include: ["src", "examples"],
+      }),
       nodeResolve(),
       babel({
         babelHelpers: "bundled",
-        exclude: 'node_modules/**',
+        exclude: "node_modules/**",
       }),
       serve({
         open: true,
-        openPage: '/',
-        host: 'localhost',
+        openPage: "/",
+        host: "localhost",
         port: 3003,
-        contentBase: ['./examples', './dist'],
+        contentBase: ["./examples", "./dist"],
       }),
       livereload({
-        watch: ['./examples'],
-        exts: ['html', 'js', 'css'],
+        watch: ["./examples"],
+        exts: ["html", "js", "css"],
       }),
       terser(),
     ],

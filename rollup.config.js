@@ -1,6 +1,8 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 import babel from "@rollup/plugin-babel";
+import { eslint } from "rollup-plugin-eslint";
+
 import pkg from "./package.json";
 const input = ["src/index.js"];
 export default [
@@ -8,6 +10,9 @@ export default [
     // UMD
     input,
     plugins: [
+      eslint({
+        include: ["src"],
+      }),
       nodeResolve(),
       babel({
         babelHelpers: "bundled",

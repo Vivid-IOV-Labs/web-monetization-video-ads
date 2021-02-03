@@ -120,7 +120,7 @@ const isActiveTab = function (handleVisibilityChange) {
     typeof document.addEventListener === "undefined" ||
     hidden === undefined
   ) {
-    throw new Error("Visibility Api not enabled")
+    throw new Error("Visibility Api not enabled");
   } else {
     document.addEventListener(visibilityChange, handler, false);
   }
@@ -175,7 +175,7 @@ export const initVideoMonetizer = ({
 
     isActiveTab((isActive) => {
       if (!isActive) {
-        dispatchEvent("monetizationpaused")
+        dispatchEvent("monetizationpaused");
       }
     });
 
@@ -188,8 +188,8 @@ export const initVideoMonetizer = ({
     const paymentPointerWithReceipt = receiptVerify.enabled
       ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
       : vanillaCredentials.enabled
-        ? createVanillaPaymentPointer(vanillaCredentials.clientId)
-        : paymentPointer;
+      ? createVanillaPaymentPointer(vanillaCredentials.clientId)
+      : paymentPointer;
 
     playPauseVideoHandler({
       videoElement,
