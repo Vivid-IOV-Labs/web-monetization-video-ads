@@ -1,15 +1,13 @@
 {
   "name": "web-monetisation-video-ads",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "prepublish:public": "npm run build && npm run bump-version",
-    "publish:public": "npm publish --access public",
-    "publish": "npm publish"
+    "prepublish": "npm run build && npm run bump-version"
   },
   "keywords": [],
   "author": "",

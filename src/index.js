@@ -6,6 +6,7 @@ import { initVideoAdsMonetizer } from "./videoAdsMonetizer";
 const videoAdvertizer = {
   startAds, stopAds, context, emitter
 }
+
 export {
   videoAdvertizer,
   initVideoMonetizer,

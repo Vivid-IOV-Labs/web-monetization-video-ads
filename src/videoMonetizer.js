@@ -23,6 +23,8 @@ monetizationproof-error
 
 monetizationreceipt
 monetizationreceipt-error
+
+monetizationpaused
  */
 
 const videoMonetizer = new EventTarget();
@@ -118,9 +120,7 @@ const isActiveTab = function (handleVisibilityChange) {
     typeof document.addEventListener === "undefined" ||
     hidden === undefined
   ) {
-    console.log(
-      "This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API."
-    );
+    throw new Error("Visibility Api not enabled")
   } else {
     document.addEventListener(visibilityChange, handler, false);
   }
@@ -174,10 +174,8 @@ export const initVideoMonetizer = ({
     dispatchEvent("monetization-enabled");
 
     isActiveTab((isActive) => {
-      if (isActive) {
-        startMonetization();
-      } else {
-        stopMonetization();
+      if (!isActive) {
+        dispatchEvent("monetizationpaused")
       }
     });
 
@@ -190,8 +188,8 @@ export const initVideoMonetizer = ({
     const paymentPointerWithReceipt = receiptVerify.enabled
       ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
       : vanillaCredentials.enabled
-      ? createVanillaPaymentPointer(vanillaCredentials.clientId)
-      : paymentPointer;
+        ? createVanillaPaymentPointer(vanillaCredentials.clientId)
+        : paymentPointer;
 
     playPauseVideoHandler({
       videoElement,
