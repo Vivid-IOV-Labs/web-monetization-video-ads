@@ -8,7 +8,7 @@ module.exports = {
     es6: true,
     browser: true,
   },
-  plugins: ["prettier"],
+  plugins: ["prettier", "jest"],
   extends: ["eslint:recommended", "plugin:prettier/recommended"],
   rules: {},
   globals: {},

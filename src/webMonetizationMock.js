@@ -40,7 +40,10 @@ const createEvents = ({
   };
 };
 
-export const initFakeMonetization = (paymentPointer) => {
+export const initFakeMonetization = (
+  paymentPointer,
+  triggerFail = { enabled: false, onStart: false, onProgress: true, timeout: 0 }
+) => {
   document.monetization = new EventTarget();
   document.monetization.state = "stopped";
   const requestId = "3rqefsvd";
@@ -58,22 +61,36 @@ export const initFakeMonetization = (paymentPointer) => {
     receipt,
     finalized,
   });
-  const fakeMonetizationEmitter = new FakeMonetizationEmitter(events);
+  const fakeMonetizationEmitter = new FakeMonetizationEmitter(
+    events,
+    triggerFail
+  );
   observeMetaTagMutations(fakeMonetizationEmitter);
 };
 class FakeMonetizationEmitter {
-  constructor(events) {
+  constructor(events, triggerFail) {
     this.monetizationProgressInterval = null;
     this.events = events;
+    this.events = triggerFail;
   }
   dispatchStop() {
-    clearInterval(this.monetizationProgressInterval);
+    if (this.monetizationProgressInterval) {
+      clearInterval(this.monetizationProgressInterval);
+    }
     const event = new CustomEvent(
       "monetizationstop",
       this.events.monetizationstop
     );
     document.monetization.dispatchEvent(event);
     document.monetization.state = "stopped";
+  }
+  dispatchPending() {
+    const event = new CustomEvent(
+      "monetizationpending",
+      this.events.monetizationstart
+    );
+    document.monetization.dispatchEvent(event);
+    document.monetization.state = "pending";
   }
   dispatchStart() {
     const event = new CustomEvent(
@@ -91,6 +108,11 @@ class FakeMonetizationEmitter {
     this.monetizationProgressInterval = setInterval(() => {
       document.monetization.dispatchEvent(event);
     }, 3000);
+    if (this.triggerFail.enabled && this.onProgress) {
+      setTimeout(() => {
+        clearTimeout(this.monetizationProgressInterval);
+      }, this.triggerFail.timeout);
+    }
   }
 }
 
@@ -117,8 +139,13 @@ const detectMetaTagAdded = (mutations) => {
 const detectMetaTag = (fakeMonetizationEmitter) =>
   new MutationObserver((mutations) => {
     if (detectMetaTagAdded(mutations)) {
-      fakeMonetizationEmitter.dispatchStart();
-      fakeMonetizationEmitter.dispatchProgress();
+      fakeMonetizationEmitter.dispatchPending();
+      if (!fakeMonetizationEmitter.triggerFail.enabled.onStart) {
+        fakeMonetizationEmitter.dispatchStart();
+        fakeMonetizationEmitter.dispatchProgress();
+      } else {
+        fakeMonetizationEmitter.dispatchStop();
+      }
     }
     if (detectMetaTagRemoved(mutations)) {
       fakeMonetizationEmitter.dispatchStop();

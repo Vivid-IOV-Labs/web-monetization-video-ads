@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 import { startAds, stopAds, context } from "./videoAdvertizer";
 import { initVideoMonetizer } from "./videoMonetizer";
 import { isWebMonetized } from "./webMonetization";

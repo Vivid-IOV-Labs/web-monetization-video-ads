@@ -10,9 +10,7 @@ export default [
     // UMD
     input,
     plugins: [
-      eslint({
-        include: ["src"],
-      }),
+      eslint(),
       nodeResolve(),
       babel({
         babelHelpers: "bundled",
