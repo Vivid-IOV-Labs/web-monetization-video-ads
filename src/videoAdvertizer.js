@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const imaSdkUrl = "//imasdk.googleapis.com/js/sdkloader/ima3.js";
 
-export const videoAdvertizer = new EventTarget();
+const emitter = new EventTarget();
 
 function initialContext() {
   return {
@@ -31,6 +31,11 @@ function initialContext() {
 }
 
 export let context = initialContext();
+
+const videoAdvertizer = {
+  emitter,
+  context,
+};
 
 function initAds({
   videoElement,
@@ -84,6 +89,7 @@ export function startAds({ videoElement, tagUrl, live, interval }) {
   } else {
     initAdsAndAttachStartHandler({ videoElement, tagUrl, live, interval });
   }
+  return videoAdvertizer;
 }
 
 function initAdsAndAttachStartHandler({
@@ -94,7 +100,7 @@ function initAdsAndAttachStartHandler({
 }) {
   initAds({ videoElement, tagUrl, live, interval })
     .then(() => {
-      videoAdvertizer.addEventListener("adsmanager-loaded", () => {
+      emitter.addEventListener("adsmanager-loaded", () => {
         if (videoElement.paused) {
           videoElement.addEventListener(
             "play",
@@ -190,7 +196,7 @@ const requestAds = ({
 
 const dispatchEvent = (name, payload = null) => {
   const event = new CustomEvent(name, { detail: payload });
-  videoAdvertizer.dispatchEvent(event);
+  emitter.dispatchEvent(event);
 };
 
 const loadScript = (src) => {

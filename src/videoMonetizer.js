@@ -154,7 +154,15 @@ export const initVideoMonetizer = ({
     createCustomPaymentPointer: true,
     bodyParsed: true,
   },
-  fakeMonetization = false,
+  fakeMonetization = {
+    enabled: false,
+    triggerFail: {
+      enabled: false,
+      onStart: false,
+      onProgress: true,
+      timeout: 6000,
+    },
+  },
 }) => {
   if (!paymentPointer && !vanillaCredentials.enabled) {
     throw new Error("No payment poynter");
@@ -172,6 +180,9 @@ export const initVideoMonetizer = ({
       "You must fill vanillaCredentials with enabeld:Boolean, clientId:String, clientSecret:String"
     );
   }
+  if (fakeMonetization.enabled) {
+    initFakeMonetization(paymentPointer, fakeMonetization.triggerFail);
+  }
   if (!isWebMonetized()) {
     noWebMonetizationHandler();
   } else {
@@ -185,9 +196,6 @@ export const initVideoMonetizer = ({
       }
     });
 
-    if (fakeMonetization) {
-      initFakeMonetization(paymentPointer);
-    }
     monetizationChecker({ videoElement, vanillaCredentials, receiptVerify });
 
     const { apiUrl } = receiptVerify;
@@ -206,5 +214,8 @@ export const initVideoMonetizer = ({
     });
   }
 
-  return videoMonetizer;
+  return {
+    emitter: videoMonetizer,
+    context: { videoElement, paymentPointer, receiptVerify, fakeMonetization },
+  };
 };

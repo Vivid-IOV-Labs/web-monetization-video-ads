@@ -23,7 +23,15 @@ initVideoAdsMonetizer({
   videoElement,
   monetizationConfig: {
     paymentPointer,
-    receiptVerify,
+    fakeMonetization: {
+      enabled: true,
+      triggerFail: {
+        enabled: true,
+        onStart: false,
+        onProgress: true,
+        timeout: 6000,
+      },
+    },
   },
   adsConfig: {
     tagUrl,

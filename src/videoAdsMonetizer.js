@@ -11,7 +11,7 @@ export const initVideoAdsMonetizer = ({
     paymentPointer,
     vanillaCredentials,
     receiptVerify,
-    fakeMonetization = false,
+    fakeMonetization,
   } = monetizationConfig;
   const { tagUrl, live, interval } = adsConfig;
 
@@ -20,9 +20,9 @@ export const initVideoAdsMonetizer = ({
     videoElement,
     vanillaCredentials,
     receiptVerify,
-    dev: fakeMonetization,
+    fakeMonetization,
   });
-
+  let videoAdvertizer;
   if (!isWebMonetized()) {
     startAds({ videoElement, tagUrl, live, interval });
   } else {
@@ -45,5 +45,5 @@ export const initVideoAdsMonetizer = ({
       }
     });
   }
-  return { videoMonetizer };
+  return { videoMonetizer, videoAdvertizer };
 };

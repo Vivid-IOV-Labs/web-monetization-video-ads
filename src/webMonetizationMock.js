@@ -42,7 +42,12 @@ const createEvents = ({
 
 export const initFakeMonetization = (
   paymentPointer,
-  triggerFail = { enabled: false, onStart: false, onProgress: true, timeout: 0 }
+  triggerFail = {
+    enabled: false,
+    onStart: false,
+    onProgress: false,
+    timeout: 5000,
+  }
 ) => {
   document.monetization = new EventTarget();
   document.monetization.state = "stopped";
@@ -71,7 +76,7 @@ class FakeMonetizationEmitter {
   constructor(events, triggerFail) {
     this.monetizationProgressInterval = null;
     this.events = events;
-    this.events = triggerFail;
+    this.triggerFail = triggerFail;
   }
   dispatchStop() {
     if (this.monetizationProgressInterval) {
@@ -107,10 +112,12 @@ class FakeMonetizationEmitter {
     );
     this.monetizationProgressInterval = setInterval(() => {
       document.monetization.dispatchEvent(event);
-    }, 3000);
-    if (this.triggerFail.enabled && this.onProgress) {
+      document.monetization.state = "progress";
+    }, 1000);
+    if (this.triggerFail.enabled && this.triggerFail.onProgress) {
       setTimeout(() => {
-        clearTimeout(this.monetizationProgressInterval);
+        clearInterval(this.monetizationProgressInterval);
+        this.dispatchStop();
       }, this.triggerFail.timeout);
     }
   }
@@ -140,11 +147,12 @@ const detectMetaTag = (fakeMonetizationEmitter) =>
   new MutationObserver((mutations) => {
     if (detectMetaTagAdded(mutations)) {
       fakeMonetizationEmitter.dispatchPending();
-      if (!fakeMonetizationEmitter.triggerFail.enabled.onStart) {
+      if (
+        fakeMonetizationEmitter.triggerFail.enabled &&
+        !fakeMonetizationEmitter.triggerFail.onStart
+      ) {
         fakeMonetizationEmitter.dispatchStart();
         fakeMonetizationEmitter.dispatchProgress();
-      } else {
-        fakeMonetizationEmitter.dispatchStop();
       }
     }
     if (detectMetaTagRemoved(mutations)) {
