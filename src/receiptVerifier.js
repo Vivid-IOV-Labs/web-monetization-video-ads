@@ -12,14 +12,18 @@ export const verifyReceipt = ({
   receipt,
   apiUrl = RECEIPT_API_URL,
   verifyEndPoint = "verify",
+  bodyParsed = true,
 }) => {
   const url = `${apiUrl}/${verifyEndPoint}`;
   return fetch(url, {
     method: "POST",
-    mode: "cors",
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
     },
-    body: receipt,
+    body: bodyParsed
+      ? JSON.stringify({
+          receipt,
+        })
+      : receipt,
   });
 };

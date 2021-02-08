@@ -9,16 +9,16 @@ export const initVideoAdsMonetizer = ({
 }) => {
   const {
     paymentPointer,
-    vanillaCredential,
+    vanillaCredentials,
     receiptVerify,
     fakeMonetization = false,
   } = monetizationConfig;
   const { tagUrl, live, interval } = adsConfig;
 
-  initVideoMonetizer({
+  const videoMonetizer = initVideoMonetizer({
     paymentPointer,
     videoElement,
-    vanillaCredential,
+    vanillaCredentials,
     receiptVerify,
     dev: fakeMonetization,
   });
@@ -45,4 +45,5 @@ export const initVideoAdsMonetizer = ({
       }
     });
   }
+  return { videoMonetizer };
 };

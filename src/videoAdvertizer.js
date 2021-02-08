@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const imaSdkUrl = "//imasdk.googleapis.com/js/sdkloader/ima3.js";
 
 export const videoAdvertizer = new EventTarget();

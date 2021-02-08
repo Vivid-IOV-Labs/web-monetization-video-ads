@@ -23,8 +23,6 @@ monetizationproof-error
 
 monetizationreceipt
 monetizationreceipt-error
-
-monetizationpaused
  */
 
 const videoMonetizer = new EventTarget();
@@ -53,7 +51,7 @@ const monetizationChecker = ({
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
         stopMonetization();
-      }, 3000);
+      }, 8000);
 
       if (vanillaCredentials.enabled) {
         const { clientSecret, clientId } = vanillaCredentials;
@@ -64,20 +62,18 @@ const monetizationChecker = ({
           })
           .catch((error) => {
             dispatchEvent("monetizationproof-error", error);
-            stopMonetization();
           });
       }
 
       if (receiptVerify.enabled) {
-        const { verifyEndPoint, apiUrl } = receiptVerify;
-        verifyReceipt({ receipt, verifyEndPoint, apiUrl })
+        const { verifyEndPoint, apiUrl, bodyParsed } = receiptVerify;
+        verifyReceipt({ receipt, verifyEndPoint, apiUrl, bodyParsed })
           .then((response) => response.json())
           .then((data) => {
             dispatchEvent("monetizationreceipt", data);
           })
           .catch((error) => {
             dispatchEvent("monetizationreceipt-error", error);
-            stopMonetization();
           });
       }
     }
@@ -120,7 +116,9 @@ const isActiveTab = function (handleVisibilityChange) {
     typeof document.addEventListener === "undefined" ||
     hidden === undefined
   ) {
-    throw new Error("Visibility Api not enabled");
+    console.log(
+      "This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API."
+    );
   } else {
     document.addEventListener(visibilityChange, handler, false);
   }
@@ -149,7 +147,13 @@ export const initVideoMonetizer = ({
   videoElement,
   paymentPointer,
   vanillaCredentials = { enabled: false, clientId: null, clientSecret: null },
-  receiptVerify = { enabled: false, apiUrl: null, verifyEndPoint: null },
+  receiptVerify = {
+    enabled: false,
+    apiUrl: null,
+    verifyEndPoint: null,
+    createCustomPaymentPointer: true,
+    bodyParsed: true,
+  },
   fakeMonetization = false,
 }) => {
   if (!paymentPointer && !vanillaCredentials.enabled) {
@@ -174,8 +178,10 @@ export const initVideoMonetizer = ({
     dispatchEvent("monetization-enabled");
 
     isActiveTab((isActive) => {
-      if (!isActive) {
-        dispatchEvent("monetizationpaused");
+      if (isActive) {
+        startMonetization();
+      } else {
+        stopMonetization();
       }
     });
 
@@ -185,12 +191,15 @@ export const initVideoMonetizer = ({
     monetizationChecker({ videoElement, vanillaCredentials, receiptVerify });
 
     const { apiUrl } = receiptVerify;
-    const paymentPointerWithReceipt = receiptVerify.enabled
-      ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
-      : vanillaCredentials.enabled
-      ? createVanillaPaymentPointer(vanillaCredentials.clientId)
-      : paymentPointer;
-
+    console.log(vanillaCredentials);
+    console.log(receiptVerify);
+    const paymentPointerWithReceipt =
+      receiptVerify.enabled && receiptVerify.createCustomPaymentPointer
+        ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
+        : vanillaCredentials.enabled
+        ? createVanillaPaymentPointer(vanillaCredentials.clientId)
+        : paymentPointer;
+    console.log(paymentPointerWithReceipt);
     playPauseVideoHandler({
       videoElement,
       paymentPointer: paymentPointerWithReceipt,
