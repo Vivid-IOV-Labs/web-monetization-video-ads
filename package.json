@@ -5,11 +5,11 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
-    "build": "rollup --config rollup.config.js -c",
+    "build": "rollup -c",
     "dev": "rollup --config rollup.config.dev.js -w",
     "lint": "eslint",
     "test": "jest",
-    "prepublish": "npm run build && npm run bump-version"
+    "prepublish": "npm run build"
   },
   "keywords": [],
   "author": "",
