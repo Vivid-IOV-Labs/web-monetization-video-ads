@@ -122,9 +122,9 @@ const isActiveTab = function (handleVisibilityChange) {
     typeof document.addEventListener === "undefined" ||
     hidden === undefined
   ) {
-    console.log(
-      "This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API."
-    );
+    // console.log(
+    //   "This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API."
+    // );
   } else {
     document.addEventListener(visibilityChange, handler, false);
   }
@@ -205,15 +205,12 @@ export const initVideoMonetizer = ({
     monetizationChecker({ videoElement, vanillaCredentials, receiptVerify });
 
     const { apiUrl } = receiptVerify;
-    console.log(vanillaCredentials);
-    console.log(receiptVerify);
     const paymentPointerWithReceipt =
       receiptVerify.enabled && receiptVerify.createCustomPaymentPointer
         ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
         : vanillaCredentials.enabled
         ? createVanillaPaymentPointer(vanillaCredentials.clientId)
         : paymentPointer;
-    console.log(paymentPointerWithReceipt);
     playPauseVideoHandler({
       videoElement,
       paymentPointer: paymentPointerWithReceipt,
