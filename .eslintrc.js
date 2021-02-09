@@ -1,12 +1,12 @@
 module.exports = {
+  root: true,
   parser: "babel-eslint",
   parserOptions: {
-    ecmaVersion: 6,
     sourceType: "module",
   },
   env: {
-    es6: true,
     browser: true,
+    node: true,
     "jest/globals": true,
   },
   plugins: ["prettier", "jest"],
@@ -15,6 +15,9 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:jest/recommended",
   ],
-  rules: {},
+  rules: {
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+  },
   globals: {},
 };
