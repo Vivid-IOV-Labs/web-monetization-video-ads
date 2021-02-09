@@ -25,7 +25,6 @@ export const getContentProof = ({ requestId, clientId, clientSecret }) => {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      // eslint-disable-next-line no-undef
       Authorization: `Basic ${Buffer.from(
         `${clientId}:${clientSecret}`
       ).toString("base64")}`,

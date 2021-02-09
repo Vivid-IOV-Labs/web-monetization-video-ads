@@ -68,7 +68,13 @@ const monetizationChecker = ({
       if (receiptVerify.enabled) {
         const { verifyEndPoint, apiUrl, bodyParsed } = receiptVerify;
         verifyReceipt({ receipt, verifyEndPoint, apiUrl, bodyParsed })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error(`${response.status} ${response.statusText} `);
+            }
+          })
           .then((data) => {
             dispatchEvent("monetizationreceipt", data);
           })
