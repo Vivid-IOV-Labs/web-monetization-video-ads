@@ -6,12 +6,12 @@ import { initVideoAdsMonetizer } from "./esm/index.js";
 //   clientSecret: "oPMA9k+i1jHi45ITXD6Biag+4xF9b7tcHnwnepe3MAA=",
 // };
 
-const receiptVerify = {
-  enabled: true,
-  apiUrl: "https://web-monetization-server-test.herokuapp.com",
-  verifyEndPoint: "verifyReceipt",
-  createCustomPaymentPointer: false,
-};
+// const receiptVerify = {
+//   enabled: true,
+//   apiUrl: "https://web-monetization-server-test.herokuapp.com",
+//   verifyEndPoint: "verifyReceipt",
+//   createCustomPaymentPointer: false,
+// };
 
 //const paymentPointer = "$ilp.uphold.com/RzZiPnxpFYf9";
 const paymentPointer = "https://web-monetization-server-test.herokuapp.com";
