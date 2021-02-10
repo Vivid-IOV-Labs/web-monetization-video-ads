@@ -22,16 +22,26 @@ export const initVideoAdsMonetizer = ({
     receiptVerify,
     fakeMonetization,
   });
+
   let videoAdvertizer;
+
   if (!isWebMonetized()) {
-    startAds({ videoElement, tagUrl, live, interval });
+    videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
   } else {
     let checkMonetizationRestart = null;
 
     document.monetization.addEventListener("monetizationstop", () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          startAds({ videoElement, tagUrl, live, interval });
+          videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
+        }, 2000);
+      }
+    });
+
+    document.monetization.addEventListener("monetizationstart-error", () => {
+      if (!videoElement.paused) {
+        checkMonetizationRestart = setTimeout(() => {
+          videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
         }, 2000);
       }
     });
@@ -45,5 +55,6 @@ export const initVideoAdsMonetizer = ({
       }
     });
   }
+
   return { videoMonetizer, videoAdvertizer };
 };

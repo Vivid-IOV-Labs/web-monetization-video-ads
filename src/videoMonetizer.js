@@ -30,6 +30,7 @@ const videoMonetizer = new EventTarget();
 const dispatchEvent = (name, payload = null) => {
   const event = new CustomEvent(name, { detail: payload });
   videoMonetizer.dispatchEvent(event);
+  if (document.monetization) document.monetization.dispatchEvent(event);
 };
 
 const monetizationChecker = ({
@@ -48,6 +49,7 @@ const monetizationChecker = ({
     "monetizationprogress",
     ({ detail: { receipt, requestId } }) => {
       clearTimeout(monetizationProgressChecker);
+
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
         stopMonetization();
@@ -72,7 +74,7 @@ const monetizationChecker = ({
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error(`${response.status} ${response.statusText} `);
+              throw new Error(response);
             }
           })
           .then((data) => {
@@ -87,20 +89,17 @@ const monetizationChecker = ({
 
   document.monetization.addEventListener("monetizationstop", () => {
     clearTimeout(monetizationProgressChecker);
+    monetizationStartEventChecker = false;
   });
 
-  videoElement.addEventListener(
-    "play",
-    () => {
-      setTimeout(() => {
-        if (!monetizationStartEventChecker) {
-          dispatchEvent("monetizationstart-error");
-          stopMonetization();
-        }
-      }, 6000);
-    },
-    { once: true }
-  );
+  videoElement.addEventListener("play", () => {
+    setTimeout(() => {
+      if (!monetizationStartEventChecker) {
+        dispatchEvent("monetizationstart-error");
+        stopMonetization();
+      }
+    }, 8000);
+  });
 };
 
 const isActiveTab = function (handleVisibilityChange) {
@@ -122,9 +121,7 @@ const isActiveTab = function (handleVisibilityChange) {
     typeof document.addEventListener === "undefined" ||
     hidden === undefined
   ) {
-    // console.log(
-    //   "This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API."
-    // );
+    throw new Error("Page Visibility API not enabled");
   } else {
     document.addEventListener(visibilityChange, handler, false);
   }
@@ -132,7 +129,11 @@ const isActiveTab = function (handleVisibilityChange) {
 
 const playPauseVideoHandler = ({ videoElement, paymentPointer }) => {
   videoElement.addEventListener("play", () => {
-    startMonetization(paymentPointer);
+    if (isWebMonetized()) {
+      startMonetization(paymentPointer);
+    } else {
+      stopMonetization();
+    }
   });
   videoElement.addEventListener("pause", () => {
     stopMonetization();
