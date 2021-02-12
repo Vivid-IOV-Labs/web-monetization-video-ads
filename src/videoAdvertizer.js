@@ -47,6 +47,7 @@ function initAds({
   context = { ...context, ...{ videoElement, tagUrl, live, interval } };
   return new Promise((resolve, reject) => {
     createVideoElementWrapper(videoElement);
+    videoElement.allowFullscreen = false;
     loadScript(imaSdkUrl)
       .then(() => {
         google.ima.settings.setVpaidMode(
@@ -150,9 +151,8 @@ function playAds() {
       adDisplayContainer.initialize();
       context.adDisplayContainerisInitialized = true;
     }
-    const width = videoElement.clientWidth;
-    const height = videoElement.clientHeight;
-    adsManager.init(width, height, google.ima.ViewMode.NORMAL);
+    resizeAdsManager("init");
+
     adsManager.start();
   } catch (e) {
     errorHandler(e);
@@ -247,7 +247,8 @@ const createAdContainerRef = (videoElement) => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;`;
+  height:100%;
+  z-index: 2147483647;`;
   const adContainerElement = document.createElement("div");
   adContainerElement.style.cssText = css;
   videoElement.parentNode.insertBefore(adContainerElement, videoElement);
@@ -322,7 +323,10 @@ const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
       onAdLoaded
     );
     window.addEventListener("resize", function () {
-      resizeAdsManager(context.videoElement);
+      resizeAdsManager();
+    });
+    document.addEventListener("fullscreenchange", function () {
+      resizeAdsManager();
     });
     context.adsManager.addEventListener(
       google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
@@ -370,29 +374,52 @@ function adBreakReadyHandler() {
   }
 }
 
-const resizeAdsManager = (videoElement) => {
-  if (context.adsManager) {
-    const width = videoElement.clientWidth;
-    const height = videoElement.clientHeight;
-    context.adsManager.resize(width, height, google.ima.ViewMode.NORMAL);
+function resizeAdsManager(action = "resize") {
+  const isFullScreen = document.fullscreenElement;
+  if (isFullScreen) {
+    fullscreenAds(action);
+  } else {
+    resizeAds(action);
+  }
+}
+const resizeAds = (action) => {
+  const { adsManager, adContainer, videoWrapper } = context;
+  if (adsManager) {
+    const width = videoWrapper.clientWidth;
+    const height = videoWrapper.clientHeight;
+    adContainer.style.position = `absolute`;
+    adContainer.style.width = `${width}px`;
+    adContainer.style.height = `${height}px`;
+    adsManager[action](width, height, google.ima.ViewMode.NORMAL);
+  }
+};
+
+const fullscreenAds = (action) => {
+  const { adsManager, adContainer } = context;
+  if (adsManager) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    adContainer.style.position = `fixed`;
+    adsManager[action](width, height, google.ima.ViewMode.FULLSCREEN);
   }
 };
 
 const onContentPauseRequested = () => {
   context.isPlaying = true;
+  context.videoElement.style.display = "none";
   context.adContainer.style.display = "block";
   context.videoElement.pause();
 };
 
 const onContentResumeRequested = () => {
   context.isPlaying = false;
+  context.videoElement.style.display = "block";
   context.adContainer.style.display = "none";
   context.videoElement.play();
 };
 
 const onAdLoaded = (adEvent) => {
   const ad = adEvent.getAd();
-  resizeAdsManager(context.videoElement);
   if (!ad.isLinear()) {
     context.videoElement.play();
   }

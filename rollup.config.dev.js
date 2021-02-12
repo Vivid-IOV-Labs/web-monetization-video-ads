@@ -26,7 +26,7 @@ export default [
         contentBase: ["./examples", "./dist"],
       }),
       livereload({
-        watch: ["./examples"],
+        watch: ["./examples", "./src"],
         exts: ["html", "js", "css"],
       }),
       terser(),

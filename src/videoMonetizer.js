@@ -30,6 +30,9 @@ const videoMonetizer = new EventTarget();
 const dispatchEvent = (name, payload = null) => {
   const event = new CustomEvent(name, { detail: payload });
   videoMonetizer.dispatchEvent(event);
+  /**
+   * Extends to document monetization
+   */
   if (document.monetization) document.monetization.dispatchEvent(event);
 };
 
@@ -91,7 +94,9 @@ const monetizationChecker = ({
     clearTimeout(monetizationProgressChecker);
     monetizationStartEventChecker = false;
   });
-
+  /**
+   * TODO OBSERVE METATAG INSTEAD
+   */
   videoElement.addEventListener("play", () => {
     setTimeout(() => {
       if (!monetizationStartEventChecker) {
