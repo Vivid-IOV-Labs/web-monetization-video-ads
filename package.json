@@ -4,6 +4,10 @@
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vivid-IOV-Labs/web-monetisation-video-ads.git"
+  },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup --config rollup.config.dev.js -w",
