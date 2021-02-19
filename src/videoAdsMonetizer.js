@@ -34,7 +34,7 @@ export const initVideoAdsMonetizer = ({
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
-        }, 8000);
+        }, 6000);
       }
     });
 
@@ -42,7 +42,7 @@ export const initVideoAdsMonetizer = ({
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
-        }, 8000);
+        }, 6000);
       }
     });
 

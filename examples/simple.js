@@ -15,7 +15,7 @@ const receiptVerify = {
 };
 
 const paymentPointer = "$ilp.uphold.com/RzZiPnxpFYf9";
-//const paymentPointer = "https://web-monetization-server-test.herokuapp.com";
+
 const tagUrl =
   "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=";
 
@@ -26,6 +26,14 @@ const { videoMonetizer } = initVideoAdsMonetizer({
   monetizationConfig: {
     paymentPointer,
     receiptVerify,
+    fakeMonetization: {
+      enabled: true,
+      triggerFail: {
+        onStart: false,
+        onProgress: true,
+        timeout: 6000,
+      },
+    },
   },
   adsConfig: {
     tagUrl,

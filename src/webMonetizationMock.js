@@ -1,5 +1,10 @@
+import {
+  observeMetaTagMutations,
+  getPointerFromMetaTag,
+} from "./webMonetization";
+
 const createEvents = ({
-  paymentPointer,
+  paymentPointer = "",
   requestId,
   amount,
   assetCode,
@@ -40,15 +45,16 @@ const createEvents = ({
   };
 };
 
-export const initFakeMonetization = (
-  paymentPointer,
+export const initFakeMonetization = ({
   triggerFail = {
-    enabled: false,
     onStart: false,
     onProgress: false,
     timeout: 5000,
+  },
+} = {}) => {
+  if (triggerFail.onStart && triggerFail.onProgress) {
+    throw new Error("onStart and onProgress cannot be both true");
   }
-) => {
   document.monetization = new EventTarget();
   document.monetization.state = "stopped";
   const requestId = "3rqefsvd";
@@ -58,7 +64,6 @@ export const initFakeMonetization = (
   const finalized = false;
   const receipt = null;
   const events = createEvents({
-    paymentPointer,
     requestId,
     amount,
     assetCode,
@@ -66,11 +71,35 @@ export const initFakeMonetization = (
     receipt,
     finalized,
   });
+
   const fakeMonetizationEmitter = new FakeMonetizationEmitter(
     events,
     triggerFail
   );
-  observeMetaTagMutations(fakeMonetizationEmitter);
+
+  const onAdded = () => {
+    const events = createEvents({
+      paymentPointer: getPointerFromMetaTag(),
+      requestId,
+      amount,
+      assetCode,
+      assetScale,
+      receipt,
+      finalized,
+    });
+    fakeMonetizationEmitter.events = events;
+    fakeMonetizationEmitter.dispatchPending();
+    if (!fakeMonetizationEmitter.triggerFail.onStart) {
+      fakeMonetizationEmitter.dispatchStart();
+      fakeMonetizationEmitter.dispatchProgress();
+    }
+  };
+
+  const onRemoved = () => {
+    fakeMonetizationEmitter.dispatchStop();
+  };
+
+  observeMetaTagMutations({ onAdded, onRemoved });
 };
 class FakeMonetizationEmitter {
   constructor(events, triggerFail) {
@@ -113,55 +142,11 @@ class FakeMonetizationEmitter {
     this.monetizationProgressInterval = setInterval(() => {
       document.monetization.dispatchEvent(event);
       document.monetization.state = "progress";
-    }, 1000);
-    if (this.triggerFail.enabled && this.triggerFail.onProgress) {
+    }, 500);
+    if (this.triggerFail.onProgress) {
       setTimeout(() => {
         clearInterval(this.monetizationProgressInterval);
-        this.dispatchStop();
       }, this.triggerFail.timeout);
     }
   }
 }
-
-const detectMetaTagRemoved = (mutations) => {
-  return (
-    mutations[0] &&
-    mutations[0].removedNodes &&
-    mutations[0].removedNodes[0] &&
-    mutations[0].removedNodes[0].name == "monetization" &&
-    mutations[0].removedNodes[0].content
-  );
-};
-
-const detectMetaTagAdded = (mutations) => {
-  return (
-    mutations[0] &&
-    mutations[0].addedNodes &&
-    mutations[0].addedNodes[0] &&
-    mutations[0].addedNodes[0].name == "monetization" &&
-    mutations[0].addedNodes[0].content
-  );
-};
-
-const detectMetaTag = (fakeMonetizationEmitter) =>
-  new MutationObserver((mutations) => {
-    if (detectMetaTagAdded(mutations)) {
-      fakeMonetizationEmitter.dispatchPending();
-      if (
-        fakeMonetizationEmitter.triggerFail.enabled &&
-        !fakeMonetizationEmitter.triggerFail.onStart
-      ) {
-        fakeMonetizationEmitter.dispatchStart();
-        fakeMonetizationEmitter.dispatchProgress();
-      }
-    }
-    if (detectMetaTagRemoved(mutations)) {
-      fakeMonetizationEmitter.dispatchStop();
-    }
-  });
-
-const observeMetaTagMutations = (fakeMonetizationEmitter) => {
-  detectMetaTag(fakeMonetizationEmitter).observe(document.head, {
-    childList: true,
-  });
-};

@@ -56,12 +56,18 @@ const monetizationChecker = ({
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
         stopMonetization();
-      }, 8000);
+      }, 6000);
 
       if (vanillaCredentials.enabled) {
         const { clientSecret, clientId } = vanillaCredentials;
         getContentProof({ clientId, clientSecret, requestId })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error(response);
+            }
+          })
           .then(({ data: { proof } }) => {
             dispatchEvent("monetizationproof", proof);
           })
@@ -103,7 +109,7 @@ const monetizationChecker = ({
         dispatchEvent("monetizationstart-error");
         stopMonetization();
       }
-    }, 8000);
+    }, 6000);
   });
 };
 
@@ -192,8 +198,12 @@ export const initVideoMonetizer = ({
       "You must fill vanillaCredentials with enabeld:Boolean, clientId:String, clientSecret:String"
     );
   }
+
   if (fakeMonetization.enabled) {
-    initFakeMonetization(paymentPointer, fakeMonetization.triggerFail);
+    initFakeMonetization({
+      paymentPointer,
+      triggerFail: fakeMonetization.triggerFail,
+    });
   }
   if (!isWebMonetized()) {
     noWebMonetizationHandler();
