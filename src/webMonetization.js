@@ -40,7 +40,7 @@ const detectMetaTagAdded = (mutations) => {
   );
 };
 
-const detectMetaTag = ({ onRemoved, onAdded }) =>
+const detectMetaTag = ({ onRemoved = Function, onAdded = Function }) =>
   new MutationObserver((mutations) => {
     if (detectMetaTagAdded(mutations)) {
       onAdded();

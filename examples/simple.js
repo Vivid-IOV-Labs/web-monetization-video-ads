@@ -27,7 +27,7 @@ const { videoMonetizer } = initVideoAdsMonetizer({
     paymentPointer,
     receiptVerify,
     fakeMonetization: {
-      enabled: true,
+      enabled: false,
       triggerFail: {
         onStart: false,
         onProgress: true,
