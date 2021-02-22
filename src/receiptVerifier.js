@@ -8,17 +8,15 @@ export const cretatePaymentPointerWithReceipt = ({
   return newPaymentPointer;
 };
 
-export const verifyReceipt = ({
+export function verifyReceipt({
   receipt,
   apiUrl = RECEIPT_API_URL,
   verifyEndPoint = "verify",
   bodyParsed = true,
-}) => {
+}) {
   const url = `${apiUrl}/${verifyEndPoint}`;
   return fetch(url, {
     method: "POST",
-    // mode: "no-cors",
-    // cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
     },
@@ -28,4 +26,4 @@ export const verifyReceipt = ({
         })
       : receipt,
   });
-};
+}

@@ -58,22 +58,10 @@ const playPauseVideoHandler = ({ videoElement, paymentPointer }) => {
 export const initVideoMonetizer = ({
   videoElement,
   paymentPointer,
-  vanillaCredentials = { enabled: false, clientId: null, clientSecret: null },
-  receiptVerify = {
-    enabled: false,
-    apiUrl: null,
-    verifyEndPoint: null,
-    createCustomPaymentPointer: true,
-    bodyParsed: true,
-  },
+  vanillaCredentials,
+  receiptVerify,
   fakeMonetization = {
     enabled: false,
-    triggerFail: {
-      enabled: false,
-      onStart: false,
-      onProgress: true,
-      timeout: 6000,
-    },
   },
 }) => {
   if (!paymentPointer && !vanillaCredentials.enabled) {

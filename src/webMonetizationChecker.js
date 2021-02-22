@@ -26,8 +26,16 @@ const dispatchEvent = (name, payload = null) => {
 };
 
 export const initMonetizationChecker = ({
-  vanillaCredentials,
-  receiptVerify,
+  vanillaCredentials = { enabled: false, clientId: null, clientSecret: null },
+  receiptVerify = {
+    enabled: false,
+    apiUrl: null,
+    verifyEndPoint: null,
+    createCustomPaymentPointer: true,
+    bodyParsed: true,
+  },
+  progressErrorWatitingTime = 6000,
+  startErrorWaitingTime = 6000,
 }) => {
   let monetizationStartEventChecker = false;
   let monetizationProgressChecker;
@@ -44,7 +52,7 @@ export const initMonetizationChecker = ({
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
         stopMonetization();
-      }, 6000);
+      }, progressErrorWatitingTime);
 
       if (vanillaCredentials.enabled) {
         const { clientSecret, clientId } = vanillaCredentials;
@@ -95,7 +103,14 @@ export const initMonetizationChecker = ({
         dispatchEvent("monetizationstart-error");
         stopMonetization();
       }
-    }, 6000);
+    }, startErrorWaitingTime);
   };
   observeMetaTagMutations({ onAdded: onMetaTagAdded });
+
+  return {
+    vanillaCredentials,
+    receiptVerify,
+    progressErrorWatitingTime,
+    startErrorWaitingTime,
+  };
 };

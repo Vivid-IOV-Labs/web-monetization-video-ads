@@ -21,7 +21,7 @@ const tagUrl =
 
 const videoElement = document.querySelector("video");
 
-const { videoMonetizer } = initVideoAdsMonetizer({
+initVideoAdsMonetizer({
   videoElement,
   monetizationConfig: {
     paymentPointer,
@@ -54,10 +54,10 @@ if (document.monetization) {
   document.monetization.addEventListener("monetizationprogress", (event) => {
     console.log("monetizationprogress", event);
   });
-  videoMonetizer.emitter.addEventListener("monetizationreceipt", (event) => {
+  document.monetization.addEventListener("monetizationreceipt", (event) => {
     console.log("monetizationreceipt", event);
   });
-  videoMonetizer.emitter.addEventListener(
+  document.monetization.addEventListener(
     "monetizationreceipt-error",
     (event) => {
       console.log("monetizationreceipt-error", event);

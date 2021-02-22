@@ -51,6 +51,7 @@ export const initFakeMonetization = ({
     onProgress: false,
     timeout: 5000,
   },
+  progressTime = 500,
 } = {}) => {
   if (triggerFail.onStart && triggerFail.onProgress) {
     throw new Error("onStart and onProgress cannot be both true");
@@ -74,7 +75,8 @@ export const initFakeMonetization = ({
 
   const fakeMonetizationEmitter = new FakeMonetizationEmitter(
     events,
-    triggerFail
+    triggerFail,
+    progressTime
   );
 
   const onAdded = () => {
@@ -102,10 +104,11 @@ export const initFakeMonetization = ({
   observeMetaTagMutations({ onAdded, onRemoved });
 };
 class FakeMonetizationEmitter {
-  constructor(events, triggerFail) {
+  constructor(events, triggerFail, progressTime) {
     this.monetizationProgressInterval = null;
     this.events = events;
     this.triggerFail = triggerFail;
+    this.progressTime = progressTime;
   }
   dispatchStop() {
     if (this.monetizationProgressInterval) {
@@ -142,7 +145,7 @@ class FakeMonetizationEmitter {
     this.monetizationProgressInterval = setInterval(() => {
       document.monetization.dispatchEvent(event);
       document.monetization.state = "progress";
-    }, 500);
+    }, this.progressTime);
     if (this.triggerFail.onProgress) {
       setTimeout(() => {
         clearInterval(this.monetizationProgressInterval);
