@@ -1,11 +1,11 @@
 jest.mock("../src/receiptVerifier");
 jest.mock("../src/vanillaVerification");
 
-import { initFakeMonetization } from "../src/webMonetizationMock";
+import { initFakeMonetization } from "../src/webMonetizationFaker";
 import { initMonetizationChecker } from "../src/webMonetizationChecker";
 import { verifyReceipt } from "../src/receiptVerifier";
 import { getContentProof } from "../src/vanillaVerification";
-import { startMonetization } from "../src/webMonetization";
+import { startMonetization } from "../src/webMonetizationHelper";
 import { delay, clearDocument } from "../tests/utils";
 
 const paymentPointer = "$custompaymentpointer";

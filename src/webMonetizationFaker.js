@@ -1,7 +1,7 @@
 import {
   observeMetaTagMutations,
   getPointerFromMetaTag,
-} from "./webMonetization";
+} from "./webMonetizationHelper";
 
 const createEvents = ({
   paymentPointer = "",

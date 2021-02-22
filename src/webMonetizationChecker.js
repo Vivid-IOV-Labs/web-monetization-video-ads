@@ -1,4 +1,7 @@
-import { stopMonetization, observeMetaTagMutations } from "./webMonetization";
+import {
+  stopMonetization,
+  observeMetaTagMutations,
+} from "./webMonetizationHelper";
 import { getContentProof } from "./vanillaVerification";
 import { verifyReceipt } from "./receiptVerifier";
 

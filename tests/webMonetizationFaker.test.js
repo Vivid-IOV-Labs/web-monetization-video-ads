@@ -1,6 +1,9 @@
-import { initFakeMonetization } from "../src/webMonetizationMock";
-import { startMonetization, stopMonetization } from "../src/webMonetization";
-import { delay, clearDocument, checkEvents } from "../tests/utils";
+import { initFakeMonetization } from "../src/webMonetizationFaker";
+import {
+  startMonetization,
+  stopMonetization,
+} from "../src/webMonetizationHelper";
+import { delay, clearDocument, checkEvents } from "./utils";
 
 const paymentPointer = "$custompaymentpointer";
 

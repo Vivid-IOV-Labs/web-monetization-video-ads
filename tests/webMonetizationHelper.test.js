@@ -3,8 +3,8 @@ import {
   stopMonetization,
   getPointerFromMetaTag,
   observeMetaTagMutations,
-} from "../src/webMonetization";
-import { delay } from "../tests/utils";
+} from "../src/webMonetizationHelper";
+import { delay } from "./utils";
 
 const paymentPointer = "$custompaymentpointer";
 

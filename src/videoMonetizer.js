@@ -2,8 +2,8 @@ import {
   startMonetization,
   stopMonetization,
   isWebMonetized,
-} from "./webMonetization";
-import { initFakeMonetization } from "./webMonetizationMock";
+} from "./webMonetizationHelper";
+import { initFakeMonetization } from "./webMonetizationFaker";
 import {
   initMonetizationChecker,
   videoMonetizer,
