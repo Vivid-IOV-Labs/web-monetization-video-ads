@@ -4,18 +4,9 @@ import {
   getPointerFromMetaTag,
   observeMetaTagMutations,
 } from "../src/webMonetization";
+import { delay } from "../tests/utils";
 
 const paymentPointer = "$custompaymentpointer";
-
-const delay = (time) => {
-  let timer;
-  clearTimeout(timer);
-  return new Promise((resolve) => {
-    timer = setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
 
 describe("WebMonetization", () => {
   it("Should start monetization", () => {

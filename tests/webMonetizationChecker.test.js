@@ -1,33 +1,20 @@
 jest.mock("../src/receiptVerifier");
 jest.mock("../src/vanillaVerification");
+
 import { initFakeMonetization } from "../src/webMonetizationMock";
 import { initMonetizationChecker } from "../src/webMonetizationChecker";
 import { verifyReceipt } from "../src/receiptVerifier";
 import { getContentProof } from "../src/vanillaVerification";
 import { startMonetization } from "../src/webMonetization";
+import { delay, clearDocument } from "../tests/utils";
 
 const paymentPointer = "$custompaymentpointer";
-
-//getContentProof.mockImplementation(() => Promise.resolve("someValue"));
-
-const delay = (time) => {
-  let timer;
-  clearTimeout(timer);
-  return new Promise((resolve) => {
-    timer = setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
-
-const clearDocument = () => {
-  document.getElementsByTagName("html")[0].innerHTML = "";
-};
 
 describe("Web Monetization Faker", () => {
   afterEach(() => {
     clearDocument();
   });
+
   it("Should emit monetization on start error", async () => {
     const config = {
       triggerFail: {

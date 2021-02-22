@@ -1,38 +1,8 @@
 import { initFakeMonetization } from "../src/webMonetizationMock";
 import { startMonetization, stopMonetization } from "../src/webMonetization";
+import { delay, clearDocument, checkEvents } from "../tests/utils";
 
 const paymentPointer = "$custompaymentpointer";
-
-const delay = (time) => {
-  let timer;
-  clearTimeout(timer);
-  return new Promise((resolve) => {
-    timer = setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
-
-const checkEvents = () => {
-  const events = {};
-  function handler({ type }) {
-    if (events[type]) {
-      events[type] += 1;
-    } else {
-      events[type] = 1;
-    }
-    return events;
-  }
-  document.monetization.addEventListener("monetizationpending", handler);
-  document.monetization.addEventListener("monetizationstart", handler);
-  document.monetization.addEventListener("monetizationprogress", handler);
-  document.monetization.addEventListener("monetizationstop", handler);
-  return events;
-};
-
-const clearDocument = () => {
-  document.getElementsByTagName("html")[0].innerHTML = "";
-};
 
 describe("Web Monetization Faker", () => {
   afterEach(() => {
