@@ -4,45 +4,35 @@ import { isWebMonetized } from "./webMonetization";
 
 export const initVideoAdsMonetizer = ({
   videoElement,
+  startAdsTime = 4000,
   adsConfig,
   monetizationConfig,
 }) => {
-  const {
-    paymentPointer,
-    vanillaCredentials,
-    receiptVerify,
-    fakeMonetization,
-  } = monetizationConfig;
-  const { tagUrl, live, interval } = adsConfig;
-
   const videoMonetizer = initVideoMonetizer({
-    paymentPointer,
+    ...monetizationConfig,
     videoElement,
-    vanillaCredentials,
-    receiptVerify,
-    fakeMonetization,
   });
 
   let videoAdvertizer;
 
   if (!isWebMonetized()) {
-    videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
+    videoAdvertizer = startAds({ ...adsConfig, videoElement });
   } else {
     let checkMonetizationRestart = null;
 
     document.monetization.addEventListener("monetizationstop", () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
-        }, 6000);
+          videoAdvertizer = startAds({ ...adsConfig, videoElement });
+        }, startAdsTime);
       }
     });
 
     document.monetization.addEventListener("monetizationstart-error", () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          videoAdvertizer = startAds({ videoElement, tagUrl, live, interval });
-        }, 6000);
+          videoAdvertizer = startAds({ ...adsConfig, videoElement });
+        }, startAdsTime);
       }
     });
 

@@ -24,6 +24,7 @@ const videoElement = document.querySelector("video");
 initVideoAdsMonetizer({
   videoElement,
   monetizationConfig: {
+    stopOnInactiveTab: true,
     paymentPointer,
     receiptVerify,
     fakeMonetization: {
