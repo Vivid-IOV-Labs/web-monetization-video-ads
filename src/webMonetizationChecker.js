@@ -72,6 +72,7 @@ export const initMonetizationChecker = ({
           })
           .catch((error) => {
             dispatchEvent("monetizationproof-error", error);
+            stopMonetization();
           });
       }
 
@@ -90,6 +91,7 @@ export const initMonetizationChecker = ({
           })
           .catch((error) => {
             dispatchEvent("monetizationreceipt-error", error);
+            stopMonetization();
           });
       }
     }

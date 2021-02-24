@@ -9,6 +9,7 @@ export const delay = (time) => {
 };
 
 export const clearDocument = () => {
+  document.monetization = undefined;
   document.getElementsByTagName("html")[0].innerHTML = "";
 };
 

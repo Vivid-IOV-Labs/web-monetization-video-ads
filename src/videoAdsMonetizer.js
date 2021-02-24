@@ -20,21 +20,19 @@ export const initVideoAdsMonetizer = ({
   } else {
     let checkMonetizationRestart = null;
 
-    document.monetization.addEventListener("monetizationstop", () => {
+    const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = startAds({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
-    });
+    };
 
-    document.monetization.addEventListener("monetizationstart-error", () => {
-      if (!videoElement.paused) {
-        checkMonetizationRestart = setTimeout(() => {
-          videoAdvertizer = startAds({ ...adsConfig, videoElement });
-        }, startAdsTime);
-      }
-    });
+    document.monetization.addEventListener("monetizationstop", attemptAdsStart);
+    document.monetization.addEventListener(
+      "monetizationstart-error",
+      attemptAdsStart
+    );
 
     document.monetization.addEventListener("monetizationprogress", () => {
       if (checkMonetizationRestart) {

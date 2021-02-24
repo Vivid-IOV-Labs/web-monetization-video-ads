@@ -9,7 +9,6 @@ const paymentPointer = "$custompaymentpointer";
 describe("Video Monetizer", () => {
   afterEach(() => {
     jest.resetAllMocks();
-    document.monetization = undefined;
     clearDocument();
   });
 
@@ -68,7 +67,7 @@ describe("Video Monetizer", () => {
     });
   });
 
-  it("Should start advertize on monetization fail", async () => {
+  it("Should start advertize on monetization fail start", async () => {
     htmlMediaMock();
     document.body.innerHTML = `
         <video id="video-element"></video>
@@ -96,6 +95,82 @@ describe("Video Monetizer", () => {
     });
     videoElement.play();
     await delay(500);
+    expect(spyMonetizer).toHaveBeenCalled();
+    expect(spyAdvertizer).toHaveBeenCalledWith({
+      ...adsConfig,
+      videoElement,
+    });
+    expect(spyAdvertizer).toHaveBeenCalledTimes(1);
+  });
+
+  it("Should start advertize on monetization fail second start", async () => {
+    htmlMediaMock();
+    document.body.innerHTML = `
+        <video id="video-element"></video>
+      `;
+    const videoElement = document.getElementById("video-element");
+    const monetizationConfig = {
+      paymentPointer,
+      fakeMonetization: {
+        enabled: true,
+      },
+    };
+    const adsConfig = {
+      tagUrl: "xxx",
+    };
+    const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    initVideoAdsMonetizer({
+      videoElement,
+      startAdsTime: 0,
+      adsConfig,
+      monetizationConfig,
+    });
+    videoElement.play();
+    await delay(500);
+    videoElement.pause();
+    // fake monetization issue like removing coil extension
+    document.monetization = undefined;
+
+    videoElement.play();
+    await delay(500);
+    expect(spyMonetizer).toHaveBeenCalled();
+    expect(spyAdvertizer).toHaveBeenCalledWith({
+      ...adsConfig,
+      videoElement,
+    });
+    expect(spyAdvertizer).toHaveBeenCalledTimes(1);
+  });
+
+  it("Should start advertize on monetization fail progress", async () => {
+    htmlMediaMock();
+    document.body.innerHTML = `
+        <video id="video-element"></video>
+      `;
+    const videoElement = document.getElementById("video-element");
+    const monetizationConfig = {
+      paymentPointer,
+      fakeMonetization: {
+        enabled: true,
+        triggerFail: {
+          onProgress: true,
+          timeout: 1000,
+        },
+      },
+    };
+    const adsConfig = {
+      tagUrl: "xxx",
+    };
+    const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    initVideoAdsMonetizer({
+      videoElement,
+      startAdsTime: 0,
+      adsConfig,
+      monetizationConfig,
+    });
+    videoElement.play();
+    await delay(1500);
     expect(spyMonetizer).toHaveBeenCalled();
     expect(spyAdvertizer).toHaveBeenCalledWith({
       ...adsConfig,

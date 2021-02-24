@@ -37,13 +37,13 @@ describe("Web Monetization Checker", () => {
     const config = {
       triggerFail: {
         onProgress: true,
-        timeout: 1200, //3 -1 times Each every 500ms
+        timeout: 800,
       },
     };
 
     initFakeMonetization(config);
     initMonetizationChecker({
-      progressErrorWatitingTime: 600,
+      progressErrorWatitingTime: 0,
     });
     const handler = jest.fn();
     document.monetization.addEventListener(
@@ -52,7 +52,7 @@ describe("Web Monetization Checker", () => {
     );
 
     startMonetization(paymentPointer);
-    await delay(3000);
+    await delay(1000);
     expect(handler).toHaveBeenCalled();
   });
 
@@ -128,7 +128,7 @@ describe("Web Monetization Checker", () => {
     startMonetization(paymentPointer);
 
     await expect(getContentProof()).rejects.toThrow("Async error");
-    await delay(1000);
+    await delay(600);
 
     expect(handler).toHaveBeenCalled();
   });
