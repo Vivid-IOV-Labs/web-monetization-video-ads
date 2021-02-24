@@ -25,7 +25,6 @@ const playPauseVideoHandler = ({ videoElement, paymentPointer }) => {
   });
   videoElement.addEventListener("ended", () => {
     stopMonetization();
-    videoElement.play();
   });
   videoElement.addEventListener("error", () => {
     stopMonetization();

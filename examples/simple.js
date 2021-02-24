@@ -43,6 +43,9 @@ initVideoAdsMonetizer({
 });
 
 if (document.monetization) {
+  videoElement.addEventListener("ended", () => {
+    videoElement.play();
+  });
   document.monetization.addEventListener("monetizationstart", () => {
     console.log("monetizationstart");
   });
