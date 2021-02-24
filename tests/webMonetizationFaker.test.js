@@ -38,12 +38,9 @@ describe("Web Monetization Faker", () => {
 
     startMonetization(paymentPointer);
     await delay(800);
-    stopMonetization();
-    await delay(100);
 
     expect(events.monetizationpending).toBe(1);
     expect(events.monetizationstart).toBeUndefined();
-    expect(events.monetizationstop).toBe(1);
     expect(events.monetizationprogress).toBeUndefined();
   });
 

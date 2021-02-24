@@ -4,7 +4,7 @@ import { isWebMonetized } from "./webMonetizationHelper";
 
 export const initVideoAdsMonetizer = ({
   videoElement,
-  startAdsTime = 4000,
+  startAdsTime = 3000,
   adsConfig,
   monetizationConfig,
 }) => {
