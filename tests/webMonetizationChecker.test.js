@@ -10,7 +10,7 @@ import { delay, clearDocument } from "../tests/utils";
 
 const paymentPointer = "$custompaymentpointer";
 
-describe("Web Monetization Faker", () => {
+describe("Web Monetization Checker", () => {
   afterEach(() => {
     clearDocument();
   });

@@ -25,6 +25,7 @@ const playPauseVideoHandler = ({ videoElement, paymentPointer }) => {
   });
   videoElement.addEventListener("ended", () => {
     stopMonetization();
+    videoElement.play();
   });
   videoElement.addEventListener("error", () => {
     stopMonetization();
@@ -36,7 +37,7 @@ export const initVideoMonetizer = ({
   paymentPointer,
   stopOnInactiveTab = false,
   vanillaCredentials = { enabled: false },
-  receiptVerify = { enabled: false },
+  receiptVerify = { enabled: false, createCustomPaymentPointer: true },
   fakeMonetization = {
     enabled: false,
   },
@@ -69,10 +70,7 @@ export const initVideoMonetizer = ({
 
   if (isWebMonetized()) {
     if (stopOnInactiveTab) {
-      console.log("stopOnInactiveTab", stopOnInactiveTab);
-
       isInactiveActiveTab((isActive) => {
-        console.log("isActive", isActive);
         if (isActive) {
           videoElement.pause();
         } else {
@@ -82,10 +80,9 @@ export const initVideoMonetizer = ({
     }
 
     initMonetizationChecker({ vanillaCredentials, receiptVerify });
-
     const { apiUrl } = receiptVerify;
     const paymentPointerWithReceipt =
-      receiptVerify.enabled && receiptVerify.createCustomPaymentPointer
+      receiptVerify.enabled && receiptVerify.withReceiptPaymentPointer
         ? cretatePaymentPointerWithReceipt({ paymentPointer, apiUrl })
         : vanillaCredentials.enabled
         ? createVanillaPaymentPointer(vanillaCredentials.clientId)
