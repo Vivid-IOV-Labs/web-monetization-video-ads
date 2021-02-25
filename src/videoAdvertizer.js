@@ -222,16 +222,16 @@ const createVideoElementWrapper = (videoElement) => {
   // line-height: 1;
   // overflow:hidden
   // `;
-  const css = `
-  width: 100%;
-  display: block;
-  background-color: #000;
-  position: relative;
-  padding: 0;
-  `;
+  // const css = `
+  // width: 100%;
+  // display: block;
+  // background-color: #000;
+  // position: relative;
+  // padding: 0;
+  // `;
 
   const videoWrapper = document.createElement("div");
-  videoWrapper.style.cssText = css;
+  //videoWrapper.style.cssText = css;
   videoWrapper.classList.add("ads-video-wrapper");
   wrap(videoElement, videoWrapper);
   context.videoWrapper = videoElement.parentNode;
