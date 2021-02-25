@@ -373,6 +373,8 @@ const resizeAds = (action) => {
     adContainer.style.position = `absolute`;
     adContainer.style.width = `${width}px`;
     adContainer.style.height = `${height}px`;
+    videoWrapper.style.width = `${width}px`;
+    videoWrapper.style.height = `${height}px`;
     adsManager[action](width, height, google.ima.ViewMode.NORMAL);
   }
 };
