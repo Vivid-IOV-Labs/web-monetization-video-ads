@@ -208,19 +208,26 @@ function wrap(el, wrapper) {
 }
 
 const createVideoElementWrapper = (videoElement) => {
-  const height = videoElement.clientHeight;
+  // const height = videoElement.clientHeight;
+  // const css = `
+  // height: ${height}px;
+  // margin: auto;
+  // width: 100%;
+  // display: block;
+  // vertical-align: top;
+  // box-sizing: border-box;
+  // background-color: #000;
+  // position: relative;
+  // padding: 0;
+  // line-height: 1;
+  // overflow:hidden
+  // `;
   const css = `
-  height: ${height}px;
-  margin: auto;
   width: 100%;
   display: block;
-  vertical-align: top;
-  box-sizing: border-box;
   background-color: #000;
   position: relative;
   padding: 0;
-  line-height: 1;
-  overflow:hidden
   `;
 
   const videoWrapper = document.createElement("div");
