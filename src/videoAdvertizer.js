@@ -366,10 +366,10 @@ function resizeAdsManager(action = "resize") {
   }
 }
 const resizeAds = (action) => {
-  const { adsManager, adContainer, videoWrapper } = context;
+  const { adsManager, adContainer, videoElement, videoWrapper } = context;
   if (adsManager) {
-    const width = videoWrapper.clientWidth;
-    const height = videoWrapper.clientHeight;
+    const width = videoElement.clientWidth;
+    const height = videoElement.clientHeight;
     adContainer.style.position = `absolute`;
     adContainer.style.width = `${width}px`;
     adContainer.style.height = `${height}px`;
