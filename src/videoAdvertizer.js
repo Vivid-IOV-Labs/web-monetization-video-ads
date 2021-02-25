@@ -366,15 +366,13 @@ function resizeAdsManager(action = "resize") {
   }
 }
 const resizeAds = (action) => {
-  const { adsManager, adContainer, videoElement, videoWrapper } = context;
+  const { adsManager, adContainer, videoWrapper } = context;
   if (adsManager) {
-    const width = videoElement.clientWidth;
-    const height = videoElement.clientHeight;
+    const width = videoWrapper.clientWidth;
+    const height = videoWrapper.clientHeight;
     adContainer.style.position = `absolute`;
     adContainer.style.width = `${width}px`;
     adContainer.style.height = `${height}px`;
-    videoWrapper.style.width = `${width}px`;
-    videoWrapper.style.height = `${height}px`;
     adsManager[action](width, height, google.ima.ViewMode.NORMAL);
   }
 };
