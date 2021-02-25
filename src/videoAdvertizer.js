@@ -143,20 +143,16 @@ export function stopAds() {
 function playAds() {
   const { adDisplayContainer, videoElement, adsManager } = context;
 
-  try {
-    if (!context.adDisplayContainerisInitialized) {
-      if (videoElement.currentTime == 0) {
-        videoElement.load();
-      }
-      adDisplayContainer.initialize();
-      context.adDisplayContainerisInitialized = true;
+  if (!context.adDisplayContainerisInitialized) {
+    if (videoElement.currentTime == 0) {
+      videoElement.load();
     }
-    resizeAdsManager("init");
-
-    adsManager.start();
-  } catch (e) {
-    errorHandler(e);
+    adDisplayContainer.initialize();
+    context.adDisplayContainerisInitialized = true;
   }
+  resizeAdsManager("init");
+
+  adsManager.start();
 }
 
 function destroyAds() {
@@ -173,25 +169,21 @@ const requestAds = ({
   videoElement,
   liveStreamPrefetchSeconds = 0,
 }) => {
-  try {
-    if (context.live) {
-      if (context.adsManager) {
-        context.adsManager.destroy();
-      }
-      if (context.adsLoader) {
-        context.adsLoader.contentComplete();
-      }
+  if (context.live) {
+    if (context.adsManager) {
+      context.adsManager.destroy();
     }
-    const adsRequest = createRequest({
-      tagUrl,
-      videoElement,
-      liveStreamPrefetchSeconds,
-    });
-    context.adsLoader.getSettings().setAutoPlayAdBreaks(false);
-    context.adsLoader.requestAds(adsRequest);
-  } catch (e) {
-    errorHandler(e);
+    if (context.adsLoader) {
+      context.adsLoader.contentComplete();
+    }
   }
+  const adsRequest = createRequest({
+    tagUrl,
+    videoElement,
+    liveStreamPrefetchSeconds,
+  });
+  context.adsLoader.getSettings().setAutoPlayAdBreaks(false);
+  context.adsLoader.requestAds(adsRequest);
 };
 
 const dispatchEvent = (name, payload = null) => {
@@ -260,117 +252,103 @@ const createDisplayer = ({ adContainer, videoElement }) => {
 };
 
 const createLoader = ({ videoElement, adDisplayContainer }) => {
-  try {
-    const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-    videoElement.addEventListener("ended", () => {
-      adsLoader.contentComplete();
-    });
-    adsLoader.addEventListener(
-      google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
-      onAdsManagerLoaded,
-      false
-    );
-    adsLoader.addEventListener(
-      google.ima.AdErrorEvent.Type.AD_ERROR,
-      onAdError,
-      false
-    );
-    return adsLoader;
-  } catch (e) {
-    errorHandler(e);
-  }
+  const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+  adsLoader.getSettings().setAutoPlayAdBreaks(false);
+  videoElement.addEventListener("ended", () => {
+    adsLoader.contentComplete();
+  });
+  adsLoader.addEventListener(
+    google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+    onAdsManagerLoaded,
+    false
+  );
+  adsLoader.addEventListener(
+    google.ima.AdErrorEvent.Type.AD_ERROR,
+    onAdError,
+    false
+  );
+  return adsLoader;
 };
 
-const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
-  try {
-    const adsRequest = new google.ima.AdsRequest();
-    adsRequest.adTagUrl = tagUrl;
-    adsRequest.linearAdSlotWidth = videoElement.clientWidth;
-    adsRequest.linearAdSlotHeight = videoElement.clientHeight;
-    adsRequest.nonLinearAdSlotWidth = videoElement.clientWidth;
-    adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
-    adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
-    adsRequest.setAdWillPlayMuted(!videoElement.muted);
-    return adsRequest;
-  } catch (e) {
-    errorHandler(e);
-  }
+const createRequest = ({ tagUrl, videoElement }) => {
+  const adsRequest = new google.ima.AdsRequest();
+  adsRequest.adTagUrl = tagUrl;
+  adsRequest.linearAdSlotWidth = videoElement.clientWidth;
+  adsRequest.linearAdSlotHeight = videoElement.clientHeight;
+  adsRequest.nonLinearAdSlotWidth = videoElement.clientWidth;
+  adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
+  //adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
+  adsRequest.setAdWillPlayMuted(!videoElement.muted);
+  return adsRequest;
 };
 
 const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
-  try {
-    var adsRenderingSettings = new google.ima.AdsRenderingSettings();
-    adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
-    context.adsManager = adsManagerLoadedEvent.getAdsManager(
-      context.videoElement,
-      adsRenderingSettings
-    );
-    context.cuePoints = context.adsManager.getCuePoints();
+  var adsRenderingSettings = new google.ima.AdsRenderingSettings();
+  adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
+  context.adsManager = adsManagerLoadedEvent.getAdsManager(
+    context.videoElement,
+    adsRenderingSettings
+  );
+  context.cuePoints = context.adsManager.getCuePoints();
+  context.adsManager.addEventListener(
+    google.ima.AdErrorEvent.Type.AD_ERROR,
+    onAdError
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+    onContentPauseRequested
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+    onContentResumeRequested
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.LOADED,
+    onAdLoaded
+  );
+  window.addEventListener("resize", function () {
+    resizeAdsManager();
+  });
+  document.addEventListener("fullscreenchange", function () {
+    resizeAdsManager();
+  });
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
+    onAdEvent
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.STARTED,
+    onAdEvent
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.COMPLETE,
+    onAdEvent
+  );
+  context.adsManager.addEventListener(
+    google.ima.AdEvent.Type.AD_BREAK_READY,
+    adBreakReadyHandler
+  );
+  dispatchEvent("adsmanager-loaded", context.adsManager);
+  Object.keys(google.ima.AdEvent.Type).forEach((type) => {
     context.adsManager.addEventListener(
-      google.ima.AdErrorEvent.Type.AD_ERROR,
-      onAdError
+      google.ima.AdEvent.Type[type],
+      (event) => {
+        const type = event.type.replace(/_/g, "").toLowerCase();
+        context.status = type;
+        dispatchEvent("ad-" + type, event);
+      }
     );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
-      onContentPauseRequested
-    );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
-      onContentResumeRequested
-    );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.LOADED,
-      onAdLoaded
-    );
-    window.addEventListener("resize", function () {
-      resizeAdsManager();
-    });
-    document.addEventListener("fullscreenchange", function () {
-      resizeAdsManager();
-    });
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
-      onAdEvent
-    );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.STARTED,
-      onAdEvent
-    );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.COMPLETE,
-      onAdEvent
-    );
-    context.adsManager.addEventListener(
-      google.ima.AdEvent.Type.AD_BREAK_READY,
-      adBreakReadyHandler
-    );
-    dispatchEvent("adsmanager-loaded", context.adsManager);
-    Object.keys(google.ima.AdEvent.Type).forEach((type) => {
-      context.adsManager.addEventListener(
-        google.ima.AdEvent.Type[type],
-        (event) => {
-          const type = event.type.replace(/_/g, "").toLowerCase();
-          context.status = type;
-          dispatchEvent("ad-" + type, event);
-        }
-      );
-    });
-    context.isInitialized = true;
-  } catch (e) {
-    errorHandler(e);
-  }
+  });
+  context.isInitialized = true;
 };
 
 function errorHandler(err) {
-  console.error(err);
   throw new Error(err);
 }
 
 function adBreakReadyHandler() {
-  if (!context.live && !context.skipNext) {
+  if (!context.skipNext) {
     context.adsManager.start();
-  } else {
-    return;
   }
 }
 
@@ -455,17 +433,39 @@ const onAdEvent = (adEvent) => {
       break;
     case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
       if (context.live) {
-        requestAds({
-          videoElement: context.videoElement,
-          tagUrl: context.tagUrl,
-          liveStreamPrefetchSeconds: context.interval - 5,
-        });
-        context.liveAdsTimeout = setTimeout(() => {
-          if (!context.videoElement.paused) {
-            playAds();
-          }
+        context.liveAdsTimeout = new Timer(function () {
+          requestAds({
+            videoElement: context.videoElement,
+            tagUrl: context.tagUrl,
+          });
         }, context.interval * 1000);
+
+        context.videoElement.addEventListener("pause", () => {
+          context.liveAdsTimeout.pause();
+        });
+        context.videoElement.addEventListener("play", () => {
+          context.liveAdsTimeout.resume();
+        });
       }
       break;
   }
 };
+
+function Timer(callback, delay) {
+  var timerId,
+    start,
+    remaining = delay;
+
+  this.pause = function () {
+    window.clearTimeout(timerId);
+    remaining -= new Date() - start;
+  };
+
+  this.resume = function () {
+    start = new Date();
+    window.clearTimeout(timerId);
+    timerId = window.setTimeout(callback, remaining);
+  };
+
+  this.resume();
+}
