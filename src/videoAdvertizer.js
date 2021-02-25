@@ -208,8 +208,9 @@ function wrap(el, wrapper) {
 }
 
 const createVideoElementWrapper = (videoElement) => {
+  const height = videoElement.clientHeight;
   const css = `
-  height: auto;
+  height: ${height};
   margin: auto;
   width: 100%;
   display: block;
@@ -219,10 +220,12 @@ const createVideoElementWrapper = (videoElement) => {
   position: relative;
   padding: 0;
   line-height: 1;
+  overflow:hidden
   `;
 
   const videoWrapper = document.createElement("div");
   videoWrapper.style.cssText = css;
+  videoWrapper.classList.add("ads-video-wrapper");
   wrap(videoElement, videoWrapper);
   context.videoWrapper = videoElement.parentNode;
 };
