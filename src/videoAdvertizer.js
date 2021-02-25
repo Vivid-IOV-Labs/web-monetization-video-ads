@@ -220,15 +220,10 @@ const createVideoElementWrapper = (videoElement) => {
   padding: 0;
   line-height: 1;
   `;
-  if (videoElement.parentNode.children > 1) {
-    const videoWrapper = document.createElement("div");
-    videoWrapper.style.cssText = css;
 
-    wrap(videoElement, videoWrapper);
-  } else {
-    const parentNode = videoElement.parentNode;
-    parentNode.style.cssText = css;
-  }
+  const videoWrapper = document.createElement("div");
+  videoWrapper.style.cssText = css;
+  wrap(videoElement, videoWrapper);
   context.videoWrapper = videoElement.parentNode;
 };
 
