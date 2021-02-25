@@ -210,7 +210,7 @@ function wrap(el, wrapper) {
 const createVideoElementWrapper = (videoElement) => {
   const height = videoElement.clientHeight;
   const css = `
-  height: ${height};
+  height: ${height}px;
   margin: auto;
   width: 100%;
   display: block;
