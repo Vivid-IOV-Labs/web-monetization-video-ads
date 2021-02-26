@@ -202,38 +202,18 @@ const loadScript = (src) => {
   });
 };
 
-function wrap(el, wrapper) {
-  el.parentNode.insertBefore(wrapper, el);
-  return wrapper.appendChild(el);
-}
-
 const createVideoElementWrapper = (videoElement) => {
-  // const height = videoElement.clientHeight;
-  // const css = `
-  // height: ${height}px;
-  // margin: auto;
-  // width: 100%;
-  // display: block;
-  // vertical-align: top;
-  // box-sizing: border-box;
-  // background-color: #000;
-  // position: relative;
-  // padding: 0;
-  // line-height: 1;
-  // overflow:hidden
-  // `;
-  // const css = `
-  // width: 100%;
-  // display: block;
-  // background-color: #000;
-  // position: relative;
-  // padding: 0;
-  // `;
-
-  const videoWrapper = document.createElement("div");
-  //videoWrapper.style.cssText = css;
-  videoWrapper.classList.add("ads-video-wrapper");
-  wrap(videoElement, videoWrapper);
+  const css = `
+  height: 100%;
+  width: 100%;
+  display: block;
+  vertical-align: top;
+  box-sizing: border-box;
+  background-color: #000;
+  position: relative;
+  `;
+  const parentNode = videoElement.parentNode;
+  parentNode.style.cssText = css;
   context.videoWrapper = videoElement.parentNode;
 };
 
