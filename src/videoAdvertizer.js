@@ -134,6 +134,7 @@ export function stopAds() {
 function playAds() {
   const { adDisplayContainer, videoElement, adsManager } = context;
   adsManager.setVolume(videoElement.volume);
+  adDisplayContainer.initialize();
   if (!context.adDisplayContainerisInitialized) {
     if (videoElement.currentTime == 0) {
       videoElement.load();
@@ -142,8 +143,9 @@ function playAds() {
     context.adDisplayContainerisInitialized = true;
   }
   resizeAdsManager("init");
-
-  adsManager.start();
+  if (!videoElement.paused) {
+    adsManager.start();
+  }
 }
 
 function destroyAds() {
@@ -323,7 +325,7 @@ function errorHandler(err) {
 }
 
 function adBreakReadyHandler() {
-  if (!context.skipNext) {
+  if (!context.skipNext && !context.videoElement.paused) {
     context.adsManager.start();
   }
 }
