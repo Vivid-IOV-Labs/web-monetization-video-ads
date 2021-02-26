@@ -143,9 +143,7 @@ function playAds() {
     context.adDisplayContainerisInitialized = true;
   }
   resizeAdsManager("init");
-  if (!videoElement.paused) {
-    adsManager.start();
-  }
+  adsManager.start();
 }
 
 function destroyAds() {
