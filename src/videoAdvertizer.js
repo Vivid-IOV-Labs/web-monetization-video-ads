@@ -189,6 +189,7 @@ const loadScript = (src) => {
     script.onload = resolve;
     script.onerror = reject;
     script.src = src;
+    script.async = "async";
     document.head.append(script);
   });
 };
