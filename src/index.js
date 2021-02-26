@@ -1,9 +1,9 @@
-import { startAds, stopAds, context } from "./videoAdvertizer";
+import { initVideoAdvertizer, stopAds, context } from "./videoAdvertizer";
 import { initVideoMonetizer } from "./videoMonetizer";
 import { initVideoAdsMonetizer } from "./videoAdsMonetizer";
 
 const videoAdvertizer = {
-  startAds,
+  initVideoAdvertizer,
   stopAds,
   context,
 };

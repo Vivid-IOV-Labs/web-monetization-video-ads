@@ -78,18 +78,9 @@ function initAds({
   });
 }
 
-export function startAds({ videoElement, tagUrl, live, interval }) {
-  const { isInitialized, adsManager } = context;
-  if (isInitialized) {
-    if (live) {
-      adsManager.start();
-    } else {
-      adsManager.setVolume(videoElement.volume);
-      context.skipNext = false;
-    }
-  } else {
-    initAdsAndAttachStartHandler({ videoElement, tagUrl, live, interval });
-  }
+export function initVideoAdvertizer({ videoElement, tagUrl, live, interval }) {
+  initAdsAndAttachStartHandler({ videoElement, tagUrl, live, interval });
+
   return videoAdvertizer;
 }
 
@@ -142,7 +133,7 @@ export function stopAds() {
 
 function playAds() {
   const { adDisplayContainer, videoElement, adsManager } = context;
-
+  adsManager.setVolume(videoElement.volume);
   if (!context.adDisplayContainerisInitialized) {
     if (videoElement.currentTime == 0) {
       videoElement.load();
