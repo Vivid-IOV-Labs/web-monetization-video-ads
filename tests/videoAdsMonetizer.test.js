@@ -28,7 +28,7 @@ describe("Video Monetizer", () => {
       tagUrl: "xxx",
     };
     const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
-    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "initVideoAdvertizer");
     initVideoAdsMonetizer({
       videoElement,
       startAdsTime: 4000,
@@ -54,7 +54,7 @@ describe("Video Monetizer", () => {
       tagUrl: "xxx",
     };
     const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
-    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "initVideoAdvertizer");
     initVideoAdsMonetizer({
       videoElement,
       adsConfig,
@@ -86,7 +86,7 @@ describe("Video Monetizer", () => {
       tagUrl: "xxx",
     };
     const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
-    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "initVideoAdvertizer");
     initVideoAdsMonetizer({
       videoElement,
       startAdsTime: 0,
@@ -119,7 +119,7 @@ describe("Video Monetizer", () => {
       tagUrl: "xxx",
     };
     const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
-    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "initVideoAdvertizer");
     initVideoAdsMonetizer({
       videoElement,
       startAdsTime: 0,
@@ -162,7 +162,7 @@ describe("Video Monetizer", () => {
       tagUrl: "xxx",
     };
     const spyMonetizer = jest.spyOn(videoMonetizer, "initVideoMonetizer");
-    const spyAdvertizer = jest.spyOn(videoAdvertizer, "startAds");
+    const spyAdvertizer = jest.spyOn(videoAdvertizer, "initVideoAdvertizer");
     initVideoAdsMonetizer({
       videoElement,
       startAdsTime: 0,
