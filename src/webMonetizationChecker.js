@@ -95,21 +95,26 @@ export const initMonetizationChecker = ({
     }
   );
 
+  document.monetization.addEventListener("monetizationstart-error", () => {
+    // console.log("monetizationstart-error dispatch");
+    metaTagObserver.disconnect();
+    stopMonetization();
+  });
+
   document.monetization.addEventListener("monetizationstop", () => {
     clearTimeout(monetizationProgressChecker);
-    monetizationStartEventChecker = false;
   });
 
   const onMetaTagAdded = () => {
+    // console.log("on meta added");
     setTimeout(() => {
       if (!monetizationStartEventChecker) {
         dispatchEvent("monetizationstart-error");
-        stopMonetization();
       }
     }, startErrorWaitingTime);
   };
-  observeMetaTagMutations({ onAdded: onMetaTagAdded });
-
+  const metaTagObserver = observeMetaTagMutations({ onAdded: onMetaTagAdded });
+  metaTagObserver.disconnect();
   return {
     vanillaCredentials,
     receiptVerify,

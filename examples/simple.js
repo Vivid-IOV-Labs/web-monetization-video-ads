@@ -24,7 +24,7 @@ const videoElement = document.querySelector("video");
 initVideoAdsMonetizer({
   videoElement,
   monetizationConfig: {
-    stopOnInactiveTab: true,
+    stopOnInactiveTab: false,
     paymentPointer,
     receiptVerify,
     fakeMonetization: {
@@ -38,7 +38,6 @@ initVideoAdsMonetizer({
   },
   adsConfig: {
     tagUrl,
-    live: true,
   },
 });
 
@@ -46,25 +45,25 @@ if (document.monetization) {
   videoElement.addEventListener("ended", () => {
     videoElement.play();
   });
-  document.monetization.addEventListener("monetizationstart", () => {
-    console.log("monetizationstart");
-  });
-  document.monetization.addEventListener("monetizationpending", (event) => {
-    console.log("monetizationpending", event);
-  });
-  document.monetization.addEventListener(",monetizationstop", (event) => {
-    console.log("monetizationstop", event);
-  });
-  document.monetization.addEventListener("monetizationprogress", (event) => {
-    console.log("monetizationprogress", event);
-  });
-  document.monetization.addEventListener("monetizationreceipt", (event) => {
-    console.log("monetizationreceipt", event);
-  });
-  document.monetization.addEventListener(
-    "monetizationreceipt-error",
-    (event) => {
-      console.log("monetizationreceipt-error", event);
-    }
-  );
+  // document.monetization.addEventListener("monetizationstart", () => {
+  //   console.log("monetizationstart");
+  // });
+  // document.monetization.addEventListener("monetizationpending", (event) => {
+  //   console.log("monetizationpending", event);
+  // });
+  // document.monetization.addEventListener(",monetizationstop", (event) => {
+  //   console.log("monetizationstop", event);
+  // });
+  // document.monetization.addEventListener("monetizationprogress", (event) => {
+  //   console.log("monetizationprogress", event);
+  // });
+  // document.monetization.addEventListener("monetizationreceipt", (event) => {
+  //   console.log("monetizationreceipt", event);
+  // });
+  // document.monetization.addEventListener(
+  //   "monetizationreceipt-error",
+  //   (event) => {
+  //     console.log("monetizationreceipt-error", event);
+  //   }
+  // );
 }

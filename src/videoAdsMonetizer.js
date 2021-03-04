@@ -22,17 +22,23 @@ export const initVideoAdsMonetizer = ({
 
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
+        // console.log("attempetAds");
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
+          // console.log("startAds", videoAdvertizer);
         }, startAdsTime);
       }
     };
 
-    document.monetization.addEventListener("monetizationstop", attemptAdsStart);
-    document.monetization.addEventListener(
-      "monetizationstart-error",
-      attemptAdsStart
-    );
+    document.monetization.addEventListener("monetizationstop", (event) => {
+      // console.log("monetizationstop", event);
+
+      attemptAdsStart();
+    });
+    document.monetization.addEventListener("monetizationstart-error", () => {
+      console.log("monetizationstart-error");
+      attemptAdsStart();
+    });
 
     document.monetization.addEventListener("monetizationprogress", () => {
       if (checkMonetizationRestart) {

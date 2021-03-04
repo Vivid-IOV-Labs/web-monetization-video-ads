@@ -1,4 +1,4 @@
-# Project name
+# Web Monetization Video Ads
 
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
 ![GitHub repo size](https://img.shields.io/github/repo-size/scottydocs/README-template.md)
@@ -7,9 +7,9 @@
 ![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/scottydocs?style=social)
 
-Project name is a `<utility/tool/feature>` that allows `<insert_target_audience>` to do `<action/task_it_does>`.
+Web Monetization Video Ads is a `utility` that allows `developers` to do `monetize videos`.
 
-Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
+It uses web monetization when available and loads ads as fallback thorugh IMA SDK.
 
 ## Prerequisites
 
@@ -19,20 +19,42 @@ Before you begin, ensure you have met the following requirements:
 * You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
 * You have read `<guide/link/documentation_related_to_project>`.
 
-## Installing <project_name>
+## Installing 
 
-To install <project_name>, follow these steps:
-
-Linux and macOS:
 ```
-<install_command>
+npmn install web-monetization-video-ads --save
 ```
 
-Windows:
+## Set Up
+The package exposes 3 submodules: 
+- `initVideoMonetizer` start or stop web monetization whenever the video element play or pause.
+- `initVideoAdvertizer` a wrapper of IMA SDK used for advertize the video element
+- `initVideoAdsMonetizer` includes both of the submodules to provide web monetization and advertizing 
+### Simple 
+The simple usage is by importing `initVideoAdsMonetizer` and pass some configurations as follow:
+
 ```
-<install_command>
+import { initVideoAdsMonetizer } from "web-monetization-video-ads";
+
+const paymentPointer = "$paymentpointer";
+const tagUrl ="linkofthetag";
+const videoElement = document.querySelector("#video-to-monetize");
+
+initVideoAdsMonetizer({
+  videoElement,
+  monetizationConfig: {
+    paymentPointer,
+  },
+  adsConfig: {
+    tagUrl,
+  },
+});
+
 ```
-## Using <project_name>
+- `videoElement` start or stop web monetization whenever the video element play or pause.
+- `monetizationConfig` a wrapper of IMA SDK used for advertize the video element
+- `adsConfig` includes both of the submodules to provide web monetization and 
+## Using 
 
 To use <project_name>, follow these steps:
 
@@ -53,16 +75,6 @@ To contribute to <project_name>, follow these steps:
 5. Create the pull request.
 
 Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
-
-## Contributors
-
-Thanks to the following people who have contributed to this project:
-
-* [@scottydocs](https://github.com/scottydocs) 📖
-* [@cainwatson](https://github.com/cainwatson) 🐛
-* [@calchuchesta](https://github.com/calchuchesta) 🐛
-
-You might want to consider using something like the [All Contributors](https://github.com/all-contributors/all-contributors) specification and its [emoji key](https://allcontributors.org/docs/en/emoji-key).
 
 ## Contact
 

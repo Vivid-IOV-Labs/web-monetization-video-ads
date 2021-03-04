@@ -11,7 +11,7 @@ function initialContext() {
     isInitialized: false,
     status: "notinitialized",
     skipNext: false,
-    interval: 20,
+    interval: 30,
     lang: "eng",
     live: false,
     tagUrl: null,
@@ -102,6 +102,7 @@ function initAdsAndAttachStartHandler({
             { once: true }
           );
         } else {
+          //console.log("play ads");
           playAds();
         }
       });
@@ -247,14 +248,14 @@ const createLoader = ({ videoElement, adDisplayContainer }) => {
   return adsLoader;
 };
 
-const createRequest = ({ tagUrl, videoElement }) => {
+const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
   const adsRequest = new google.ima.AdsRequest();
   adsRequest.adTagUrl = tagUrl;
   adsRequest.linearAdSlotWidth = videoElement.clientWidth;
   adsRequest.linearAdSlotHeight = videoElement.clientHeight;
   adsRequest.nonLinearAdSlotWidth = videoElement.clientWidth;
   adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
-  //adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
+  adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
   adsRequest.setAdWillPlayMuted(!videoElement.muted);
   return adsRequest;
 };
@@ -382,7 +383,7 @@ const onAdLoaded = (adEvent) => {
 
 const onAdError = (adErrorEvent) => {
   errorHandler(adErrorEvent.getError());
-  if (context.dsManager) {
+  if (context.adsManager) {
     context.adsManager.destroy();
   }
 };
@@ -414,8 +415,9 @@ const onAdEvent = (adEvent) => {
           requestAds({
             videoElement: context.videoElement,
             tagUrl: context.tagUrl,
+            liveStreamPrefetchSeconds: 10,
           });
-        }, context.interval * 1000);
+        }, context.interval - 10 * 1000);
 
         context.videoElement.addEventListener("pause", () => {
           context.liveAdsTimeout.pause();

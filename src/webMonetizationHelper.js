@@ -40,7 +40,7 @@ const detectMetaTagAdded = (mutations) => {
   );
 };
 
-const detectMetaTag = ({ onRemoved = Function, onAdded = Function }) =>
+const createMetaTagObserver = ({ onRemoved = Function, onAdded = Function }) =>
   new MutationObserver((mutations) => {
     if (detectMetaTagAdded(mutations)) {
       onAdded();
@@ -55,7 +55,9 @@ export const observeMetaTagMutations = ({
   onAdded,
   document = window.document,
 }) => {
-  detectMetaTag({ onRemoved, onAdded }).observe(document.head, {
+  const metaTagObserver = createMetaTagObserver({ onRemoved, onAdded });
+  metaTagObserver.observe(document.head, {
     childList: true,
   });
+  return metaTagObserver;
 };
