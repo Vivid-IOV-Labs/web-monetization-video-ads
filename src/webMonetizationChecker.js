@@ -54,6 +54,7 @@ export const initMonetizationChecker = ({
 
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
+        metaTagObserver.disconnect();
         stopMonetization();
       }, progressErrorWatitingTime);
 

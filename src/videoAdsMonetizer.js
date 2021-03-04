@@ -16,6 +16,7 @@ export const initVideoAdsMonetizer = ({
   let videoAdvertizer;
 
   if (!isWebMonetized()) {
+    console.log("not montezied");
     videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
   } else {
     let checkMonetizationRestart = null;
@@ -23,14 +24,20 @@ export const initVideoAdsMonetizer = ({
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          videoElement.pause();
+          // videoElement.pause();
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
     };
-
+    document.monetization.addEventListener("monetizationprogress-error", () => {
+      console.log("monetizationprogress-error");
+    });
+    document.monetization.addEventListener("monetizationstart-error", () => {
+      console.log("monetizationstart-error");
+    });
     document.monetization.addEventListener("monetizationstop", () => {
-      if (!context.hasPlayed) {
+      console.log("monetizationstop");
+      if (context.status !== "alladscompleted") {
         attemptAdsStart();
       }
     });

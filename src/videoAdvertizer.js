@@ -92,15 +92,14 @@ function initAdsAndAttachStartHandler({
 }) {
   initAds({ videoElement, tagUrl, live, interval })
     .then(() => {
-      emitter.addEventListener("adsmanager-loaded", () => {
-        videoElement.addEventListener(
-          "play",
-          (event) => {
-            playAds(event);
-          },
-          { once: true }
-        );
-      });
+      console.log(context);
+      videoElement.addEventListener(
+        "play",
+        (event) => {
+          playAds(event);
+        },
+        { once: true }
+      );
     })
     .catch((err) => {
       errorHandler(err);
@@ -129,8 +128,6 @@ export function stopAds() {
 
 function playAds() {
   const { adDisplayContainer, videoElement, adsManager } = context;
-  adsManager.setVolume(videoElement.volume);
-  adDisplayContainer.initialize();
   if (!context.adDisplayContainerisInitialized) {
     if (videoElement.currentTime == 0) {
       videoElement.load();
@@ -139,6 +136,7 @@ function playAds() {
     context.adDisplayContainerisInitialized = true;
   }
   resizeAdsManager("init");
+  adsManager.setVolume(videoElement.volume);
   adsManager.start();
 }
 
