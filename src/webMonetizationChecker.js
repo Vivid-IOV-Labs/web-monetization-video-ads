@@ -114,7 +114,7 @@ export const initMonetizationChecker = ({
     }, startErrorWaitingTime);
   };
   const metaTagObserver = observeMetaTagMutations({ onAdded: onMetaTagAdded });
-  metaTagObserver.disconnect();
+
   return {
     vanillaCredentials,
     receiptVerify,
