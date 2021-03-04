@@ -154,6 +154,7 @@ const requestAds = ({
   videoElement,
   liveStreamPrefetchSeconds = 0,
 }) => {
+  console.log("request ads");
   if (context.live) {
     if (context.adsManager) {
       context.adsManager.destroy();
@@ -404,13 +405,15 @@ const onAdEvent = (adEvent) => {
       break;
     case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
       if (context.live) {
+        console.log("islive");
+        requestAds({
+          videoElement: context.videoElement,
+          tagUrl: context.tagUrl,
+          liveStreamPrefetchSeconds: context.interval,
+        });
         context.liveAdsTimeout = new Timer(function () {
-          requestAds({
-            videoElement: context.videoElement,
-            tagUrl: context.tagUrl,
-            liveStreamPrefetchSeconds: 0,
-          });
           playAds();
+          console.log("islive repeat");
         }, context.interval * 1000);
 
         context.videoElement.addEventListener("pause", () => {
