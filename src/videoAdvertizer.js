@@ -102,7 +102,6 @@ function initAdsAndAttachStartHandler({
             { once: true }
           );
         } else {
-          //console.log("play ads");
           playAds();
         }
       });
@@ -395,7 +394,6 @@ const onAdEvent = (adEvent) => {
     case google.ima.AdEvent.Type.LOADED:
       break;
     case google.ima.AdEvent.Type.STARTED:
-      context.hasPlayed = true;
       if (ad.isLinear()) {
         context.intervalTimer = setInterval(function () {
           context.remainingTime = context.adsManager
@@ -425,6 +423,8 @@ const onAdEvent = (adEvent) => {
         context.videoElement.addEventListener("play", () => {
           context.liveAdsTimeout.resume();
         });
+      } else {
+        context.hasPlayed = true;
       }
       break;
   }

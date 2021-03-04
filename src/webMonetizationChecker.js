@@ -38,7 +38,7 @@ export const initMonetizationChecker = ({
     bodyParsed: true,
   },
   progressErrorWatitingTime = 6000,
-  startErrorWaitingTime = 6000,
+  startErrorWaitingTime = 8000,
 }) => {
   let monetizationStartEventChecker = false;
   let monetizationProgressChecker;
@@ -96,17 +96,17 @@ export const initMonetizationChecker = ({
   );
 
   document.monetization.addEventListener("monetizationstart-error", () => {
-    // console.log("monetizationstart-error dispatch");
+    const event = new Event("monetizationstop");
+    document.monetization.dispatchEvent(event);
     metaTagObserver.disconnect();
-    stopMonetization();
   });
 
   document.monetization.addEventListener("monetizationstop", () => {
     clearTimeout(monetizationProgressChecker);
+    monetizationStartEventChecker = false;
   });
 
   const onMetaTagAdded = () => {
-    // console.log("on meta added");
     setTimeout(() => {
       if (!monetizationStartEventChecker) {
         dispatchEvent("monetizationstart-error");

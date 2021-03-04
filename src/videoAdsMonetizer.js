@@ -4,7 +4,7 @@ import { isWebMonetized } from "./webMonetizationHelper";
 
 export const initVideoAdsMonetizer = ({
   videoElement,
-  startAdsTime = 3000,
+  startAdsTime = 1000,
   adsConfig,
   monetizationConfig,
 }) => {
@@ -22,22 +22,16 @@ export const initVideoAdsMonetizer = ({
 
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
-        // console.log("attempetAds");
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
-          // console.log("startAds", videoAdvertizer);
         }, startAdsTime);
       }
     };
 
     document.monetization.addEventListener("monetizationstop", () => {
-      // console.log("monetizationstop", event);
-
-      attemptAdsStart();
-    });
-    document.monetization.addEventListener("monetizationstart-error", () => {
-      console.log("monetizationstart-error");
-      attemptAdsStart();
+      if (!context.hasPlayed) {
+        attemptAdsStart();
+      }
     });
 
     document.monetization.addEventListener("monetizationprogress", () => {
