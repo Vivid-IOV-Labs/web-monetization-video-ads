@@ -389,6 +389,7 @@ const onAdEvent = (adEvent) => {
       break;
     case google.ima.AdEvent.Type.STARTED:
       if (ad.isLinear()) {
+        context.hasPlayed = true;
         context.intervalTimer = setInterval(function () {
           context.remainingTime = context.adsManager
             ? context.adsManager.getRemainingTime()
@@ -407,9 +408,10 @@ const onAdEvent = (adEvent) => {
           requestAds({
             videoElement: context.videoElement,
             tagUrl: context.tagUrl,
-            liveStreamPrefetchSeconds: 10,
+            liveStreamPrefetchSeconds: 0,
           });
-        }, context.interval - 10 * 1000);
+          playAds();
+        }, context.interval * 1000);
 
         context.videoElement.addEventListener("pause", () => {
           context.liveAdsTimeout.pause();
@@ -417,8 +419,6 @@ const onAdEvent = (adEvent) => {
         context.videoElement.addEventListener("play", () => {
           context.liveAdsTimeout.resume();
         });
-      } else {
-        context.hasPlayed = true;
       }
       break;
   }
