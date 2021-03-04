@@ -30,7 +30,7 @@ export const initVideoAdsMonetizer = ({
       }
     };
 
-    document.monetization.addEventListener("monetizationstop", (event) => {
+    document.monetization.addEventListener("monetizationstop", () => {
       // console.log("monetizationstop", event);
 
       attemptAdsStart();
