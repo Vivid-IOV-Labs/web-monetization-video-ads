@@ -93,17 +93,13 @@ function initAdsAndAttachStartHandler({
   initAds({ videoElement, tagUrl, live, interval })
     .then(() => {
       emitter.addEventListener("adsmanager-loaded", () => {
-        if (videoElement.paused) {
-          videoElement.addEventListener(
-            "play",
-            (event) => {
-              playAds(event);
-            },
-            { once: true }
-          );
-        } else {
-          playAds();
-        }
+        videoElement.addEventListener(
+          "play",
+          (event) => {
+            playAds(event);
+          },
+          { once: true }
+        );
       });
     })
     .catch((err) => {

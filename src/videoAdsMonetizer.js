@@ -4,7 +4,7 @@ import { isWebMonetized } from "./webMonetizationHelper";
 
 export const initVideoAdsMonetizer = ({
   videoElement,
-  startAdsTime = 1000,
+  startAdsTime = 6000,
   adsConfig,
   monetizationConfig,
 }) => {
@@ -23,6 +23,7 @@ export const initVideoAdsMonetizer = ({
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
+          videoElement.pause();
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
