@@ -1,6 +1,7 @@
 import { initVideoAdvertizer, stopAds, context } from "./videoAdvertizer";
 import { initVideoMonetizer } from "./videoMonetizer";
 import { isWebMonetized } from "./webMonetizationHelper";
+import { devLog } from "./devLog";
 
 export const initVideoAdsMonetizer = ({
   videoElement,
@@ -16,7 +17,7 @@ export const initVideoAdsMonetizer = ({
   let videoAdvertizer;
 
   if (!isWebMonetized()) {
-    console.log("not montezied");
+    devLog("not montezied");
     videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
   } else {
     let checkMonetizationRestart = null;
@@ -24,20 +25,20 @@ export const initVideoAdsMonetizer = ({
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          console.log("attempt start");
+          devLog("attempt start");
 
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
     };
     document.monetization.addEventListener("monetizationprogress-error", () => {
-      console.log("monetizationprogress-error");
+      devLog("monetizationprogress-error");
     });
     document.monetization.addEventListener("monetizationstart-error", () => {
-      console.log("monetizationstart-error");
+      devLog("monetizationstart-error");
     });
     document.monetization.addEventListener("monetizationstop", () => {
-      console.log("monetizationstop");
+      devLog("monetizationstop");
       if (!context.hasPlayed) {
         attemptAdsStart();
       }

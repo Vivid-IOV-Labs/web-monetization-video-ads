@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { devLog } from "./devLog";
 const imaSdkUrl = "//imasdk.googleapis.com/js/sdkloader/ima3.js";
 
 const emitter = new EventTarget();
@@ -104,7 +105,7 @@ function initAdsAndAttachStartHandler({
               { once: true }
             );
           } else {
-            console.log("start ads", context);
+            devLog("start ads", context);
             playAds();
           }
         }
@@ -144,11 +145,11 @@ function playAds() {
     adDisplayContainer.initialize();
     context.adDisplayContainerisInitialized = true;
   }
-  console.log("playAds", adsManager);
+  devLog("playAds", adsManager);
 
   resizeAdsManager("init");
-  console.log("playAds", adsManager);
-  console.log("playAds manager loaded", adsManager);
+  devLog("playAds", adsManager);
+  devLog("playAds manager loaded", adsManager);
 
   adsManager.setVolume(videoElement.volume);
   adsManager.start();
@@ -168,7 +169,7 @@ const requestAds = ({
   videoElement,
   liveStreamPrefetchSeconds = 0,
 }) => {
-  console.log("request ads");
+  devLog("request ads");
   if (context.live) {
     if (context.adsManager) {
       context.adsManager.destroy();
@@ -234,8 +235,8 @@ const createAdContainerRef = (videoElement) => {
 };
 
 const createDisplayer = ({ adContainer, videoElement }) => {
-  console.log("createDisplayer adContainer", adContainer);
-  console.log(" createDisplayer videoElement", videoElement);
+  devLog("createDisplayer adContainer", adContainer);
+  devLog(" createDisplayer videoElement", videoElement);
   return new google.ima.AdDisplayContainer(adContainer, videoElement);
 };
 
@@ -319,7 +320,7 @@ const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
     adBreakReadyHandler
   );
   dispatchEvent("adsmanager-loaded", context.adsManager);
-  console.log("adsmanager-loaded");
+  devLog("adsmanager-loaded");
   Object.keys(google.ima.AdEvent.Type).forEach((type) => {
     context.adsManager.addEventListener(
       google.ima.AdEvent.Type[type],
@@ -353,7 +354,7 @@ function resizeAdsManager(action = "resize") {
 }
 const resizeAds = (action) => {
   const { adsManager, adContainer, videoWrapper } = context;
-  console.log("resizeAds", adsManager);
+  devLog("resizeAds", adsManager);
   if (adsManager) {
     const width = videoWrapper.clientWidth;
     const height = videoWrapper.clientHeight;
@@ -427,18 +428,18 @@ const onAdEvent = (adEvent) => {
       context.hasAllCompleted = true;
 
       if (context.live) {
-        console.log("islive");
+        devLog("islive");
         requestAds({
           videoElement: context.videoElement,
           tagUrl: context.tagUrl,
           liveStreamPrefetchSeconds: context.interval,
         });
         context.liveAdsTimeout = new Timer(function () {
-          console.log("islive repeat");
+          devLog("islive repeat");
 
           // emitter.addEventListener("adsmanager-loaded", () => {
           playAds();
-          console.log("islive repeat");
+          devLog("islive repeat");
           //  });
         }, context.interval * 1000);
 
