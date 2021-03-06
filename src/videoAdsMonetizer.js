@@ -24,7 +24,8 @@ export const initVideoAdsMonetizer = ({
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          // videoElement.pause();
+          console.log("attempt start");
+
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
@@ -37,7 +38,7 @@ export const initVideoAdsMonetizer = ({
     });
     document.monetization.addEventListener("monetizationstop", () => {
       console.log("monetizationstop");
-      if (context.status !== "alladscompleted") {
+      if (!context.hasPlayed) {
         attemptAdsStart();
       }
     });

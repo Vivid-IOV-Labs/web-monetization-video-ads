@@ -234,6 +234,8 @@ const createAdContainerRef = (videoElement) => {
 };
 
 const createDisplayer = ({ adContainer, videoElement }) => {
+  console.log("createDisplayer adContainer", adContainer);
+  console.log(" createDisplayer videoElement", videoElement);
   return new google.ima.AdDisplayContainer(adContainer, videoElement);
 };
 
