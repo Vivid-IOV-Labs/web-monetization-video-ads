@@ -1,10 +1,11 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
 import babel from "@rollup/plugin-babel";
 import pkg from "./package.json";
 import serve from "rollup-plugin-serve";
+import replace from "@rollup/plugin-replace";
 import livereload from "rollup-plugin-livereload";
 import { eslint } from "rollup-plugin-eslint";
+import globals from "rollup-plugin-node-globals";
 
 const input = ["src/index.js"];
 export default [
@@ -14,6 +15,9 @@ export default [
     plugins: [
       eslint(),
       nodeResolve(),
+      replace({
+        "process.env.NODE_ENV": JSON.stringify("development"),
+      }),
       babel({
         babelHelpers: "bundled",
         exclude: "node_modules/**",
@@ -29,7 +33,7 @@ export default [
         watch: ["./examples", "./src"],
         exts: ["html", "js", "css"],
       }),
-      terser(),
+      globals(),
     ],
     output: {
       file: `examples/${pkg.name}.min.js`,
