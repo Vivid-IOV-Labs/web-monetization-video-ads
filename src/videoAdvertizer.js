@@ -7,6 +7,7 @@ function initialContext() {
   return {
     adDisplayContainerisInitialized: false,
     hasPlayed: false,
+    hasAllCompleted: false,
     isPlaying: false,
     isInitialized: false,
     status: "notinitialized",
@@ -92,14 +93,22 @@ function initAdsAndAttachStartHandler({
 }) {
   initAds({ videoElement, tagUrl, live, interval })
     .then(() => {
-      console.log(context);
-      videoElement.addEventListener(
-        "play",
-        (event) => {
-          playAds(event);
-        },
-        { once: true }
-      );
+      emitter.addEventListener("adsmanager-loaded", () => {
+        if (!context.hasAllCompleted) {
+          if (videoElement.paused) {
+            videoElement.addEventListener(
+              "play",
+              (event) => {
+                playAds(event);
+              },
+              { once: true }
+            );
+          } else {
+            console.log("start ads", context);
+            playAds();
+          }
+        }
+      });
     })
     .catch((err) => {
       errorHandler(err);
@@ -135,7 +144,12 @@ function playAds() {
     adDisplayContainer.initialize();
     context.adDisplayContainerisInitialized = true;
   }
+  console.log("playAds", adsManager);
+
   resizeAdsManager("init");
+  console.log("playAds", adsManager);
+  console.log("playAds manager loaded", adsManager);
+
   adsManager.setVolume(videoElement.volume);
   adsManager.start();
 }
@@ -250,6 +264,8 @@ const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
   adsRequest.nonLinearAdSlotWidth = videoElement.clientWidth;
   adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
   adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
+  adsRequest.vastLoadTimeout = 10000;
+  adsRequest.setAdWillAutoPlay(true);
   adsRequest.setAdWillPlayMuted(!videoElement.muted);
   return adsRequest;
 };
@@ -301,6 +317,7 @@ const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
     adBreakReadyHandler
   );
   dispatchEvent("adsmanager-loaded", context.adsManager);
+  console.log("adsmanager-loaded");
   Object.keys(google.ima.AdEvent.Type).forEach((type) => {
     context.adsManager.addEventListener(
       google.ima.AdEvent.Type[type],
@@ -334,6 +351,7 @@ function resizeAdsManager(action = "resize") {
 }
 const resizeAds = (action) => {
   const { adsManager, adContainer, videoWrapper } = context;
+  console.log("resizeAds", adsManager);
   if (adsManager) {
     const width = videoWrapper.clientWidth;
     const height = videoWrapper.clientHeight;
@@ -404,6 +422,8 @@ const onAdEvent = (adEvent) => {
       }
       break;
     case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
+      context.hasAllCompleted = true;
+
       if (context.live) {
         console.log("islive");
         requestAds({
@@ -412,8 +432,12 @@ const onAdEvent = (adEvent) => {
           liveStreamPrefetchSeconds: context.interval,
         });
         context.liveAdsTimeout = new Timer(function () {
+          console.log("islive repeat");
+
+          // emitter.addEventListener("adsmanager-loaded", () => {
           playAds();
           console.log("islive repeat");
+          //  });
         }, context.interval * 1000);
 
         context.videoElement.addEventListener("pause", () => {
