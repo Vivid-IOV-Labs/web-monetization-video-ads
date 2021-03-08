@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production  rollup -c",
-    "dev": "cross-env NODE_ENV=development rollup --config rollup.config.dev.js",
+    "dev": "cross-env NODE_ENV=development rollup --config rollup.config.dev.js -w",
     "lint": "eslint",
     "test": "jest",
     "prepublish": "npm run build"

@@ -14,10 +14,11 @@ export default [
     input,
     plugins: [
       eslint(),
-      nodeResolve(),
       replace({
+        preventAssignment: true,
         "process.env.NODE_ENV": JSON.stringify("development"),
       }),
+      nodeResolve(),
       babel({
         babelHelpers: "bundled",
         exclude: "node_modules/**",
