@@ -22,7 +22,6 @@ export const initVideoAdsMonetizer = ({
     const attemptAdsStart = () => {
       if (!videoElement.paused) {
         checkMonetizationRestart = setTimeout(() => {
-          console.log();
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
         }, startAdsTime);
       }
