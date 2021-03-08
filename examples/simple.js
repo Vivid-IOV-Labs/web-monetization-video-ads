@@ -89,6 +89,24 @@ document.addEventListener(
           console.log("monetizationprogress", event);
         }
       );
+      document.monetization.addEventListener(
+        "monetizationprogress-error",
+        (event) => {
+          console.log("monetizationprogress-error", event);
+        }
+      );
+      document.monetization.addEventListener(
+        "monetizationstart-error",
+        (event) => {
+          console.log("monetizationstart-error", event);
+        }
+      );
+      document.monetization.addEventListener(
+        "monetizationreceipt-error",
+        (event) => {
+          console.log("monetizationreceipt-error", event);
+        }
+      );
       document.monetization.addEventListener("monetizationreceipt", (event) => {
         console.log("monetizationreceipt", event);
       });

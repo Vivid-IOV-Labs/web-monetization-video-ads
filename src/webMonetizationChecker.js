@@ -1,5 +1,5 @@
 import {
-  stopMonetization,
+  // stopMonetization,
   observeMetaTagMutations,
 } from "./webMonetizationHelper";
 import { getContentProof } from "./vanillaVerification";
@@ -54,8 +54,9 @@ export const initMonetizationChecker = ({
 
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
+        clearTimeout(monetizationProgressChecker);
+        monetizationStartEventChecker = false;
         metaTagObserver.disconnect();
-        stopMonetization();
       }, progressErrorWatitingTime);
 
       if (vanillaCredentials.enabled) {
@@ -97,14 +98,9 @@ export const initMonetizationChecker = ({
   );
 
   document.monetization.addEventListener("monetizationstart-error", () => {
-    const event = new Event("monetizationstop");
-    document.monetization.dispatchEvent(event);
-    metaTagObserver.disconnect();
-  });
-
-  document.monetization.addEventListener("monetizationstop", () => {
     clearTimeout(monetizationProgressChecker);
     monetizationStartEventChecker = false;
+    metaTagObserver.disconnect();
   });
 
   const onMetaTagAdded = () => {

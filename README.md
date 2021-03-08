@@ -47,6 +47,7 @@ const videoAdvertizer = initVideoAdsMonetizer(config);
 -  `monetizationConfig` Used by `initVideoMonetizer` for monetize.
 
 -  `adsConfig` Used by `initVideoAdvertizer` for initializing and loading ads.
+- `startAdsTime (dedfault = 4000)` Waiting time before attempting to initialize the advertising.
 
 Launches `initVideoAdvertizer` when `document.monetization` is not present in the page or some `monetization errors` occured and runs `initVideoMonetizer`in the other case.
 
@@ -128,6 +129,8 @@ const videoAdvertizer = initVideoAdvertizer(adsConfig);
 
 -  `interval` includes both of the submodules to provide web monetization and
 
+## Issues
+- Mobile or MultiVideos are not yet supported or tested. 
 ## License
 
 This project uses the following license: [MIT License](https://github.com/Vivid-IOV-Labs/web-monetisation-video-ads/blob/main/LICENSE.md).
