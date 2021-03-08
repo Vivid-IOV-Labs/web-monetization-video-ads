@@ -4,6 +4,7 @@ import {
 } from "./webMonetizationHelper";
 import { getContentProof } from "./vanillaVerification";
 import { verifyReceipt } from "./receiptVerifier";
+import { EventTarget, Event } from "event-target-shim";
 
 /**
    * Events
@@ -20,7 +21,7 @@ import { verifyReceipt } from "./receiptVerifier";
 export const videoMonetizer = new EventTarget();
 
 const dispatchEvent = (name, payload = null) => {
-  const event = new CustomEvent(name, { detail: payload });
+  const event = new Event(name, { detail: payload });
   videoMonetizer.dispatchEvent(event);
   /**
    * Extends to document monetization

@@ -1,3 +1,5 @@
+import { EventTarget, Event } from "event-target-shim";
+
 /* eslint-disable no-undef */
 const imaSdkUrl = "//imasdk.googleapis.com/js/sdkloader/ima3.js";
 
@@ -182,7 +184,7 @@ const requestAds = ({
 };
 
 const dispatchEvent = (name, payload = null) => {
-  const event = new CustomEvent(name, { detail: payload });
+  const event = new Event(name, { detail: payload });
   emitter.dispatchEvent(event);
 };
 
