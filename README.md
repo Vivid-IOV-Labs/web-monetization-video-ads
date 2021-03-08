@@ -51,6 +51,8 @@ const videoAdvertizer = initVideoAdsMonetizer(config);
 
 Launches `initVideoAdvertizer` when `document.monetization` is not present in the page or some `monetization errors` occured and runs `initVideoMonetizer`in the other case.
 
+It also makes sure to run `initVideoAdvertizer` once and pause the `videoElement` on every `monetizationstop` events.
+
 ### Others Modules In Depth
 
 #### VideoMonetizer
@@ -61,7 +63,6 @@ import { initVideoMonetizer } from "web-monetization-video-ads";
 
 const monetizationConfig = {
 	paymentPointer,
-	stopOnInactiveTab: false,
 	receiptVerify:{
 		enabled: false,
 		apiUrl: "xxxxxx",
