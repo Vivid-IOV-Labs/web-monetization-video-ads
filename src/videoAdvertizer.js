@@ -115,8 +115,8 @@ function initAdsAndAttachStartHandler({
 }
 
 export function stopAds() {
-  const { live, liveAdsTimeout, videoElement } = context;
-  if (live) {
+  const { live, liveAdsTimeout, videoElement, hasPlayed } = context;
+  if (live || hasPlayed) {
     clearTimeout(liveAdsTimeout);
     destroyAds();
   } else {
@@ -433,7 +433,7 @@ const onAdEvent = (adEvent) => {
           context.liveAdsTimeout && context.liveAdsTimeout.pause();
         });
         context.videoElement.addEventListener("play", () => {
-          context.liveAdsTimeout && context.liveAdsTimeout.resume();
+          context.liveAdsTimeoutx && context.liveAdsTimeout.resume();
         });
       }
       break;

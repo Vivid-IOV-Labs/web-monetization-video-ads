@@ -19,10 +19,12 @@ export const initVideoAdsMonetizer = ({
     videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
   } else {
     let checkMonetizationRestart = null;
+    let attemptOccurred = false;
     const attemptAdsStart = () => {
-      if (!videoElement.paused) {
+      if (!videoElement.paused && !attemptOccurred) {
         checkMonetizationRestart = setTimeout(() => {
           videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
+          attemptOccurred = true;
         }, startAdsTime);
       }
     };

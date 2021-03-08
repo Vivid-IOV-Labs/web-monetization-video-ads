@@ -41,6 +41,7 @@ export const initMonetizationChecker = ({
   startErrorWaitingTime = 8000,
 }) => {
   let monetizationStartEventChecker = false;
+  let monetizationStartTimeChecker;
   let monetizationProgressChecker;
 
   document.monetization.addEventListener("monetizationstart", () => {
@@ -55,8 +56,8 @@ export const initMonetizationChecker = ({
       monetizationProgressChecker = setTimeout(() => {
         dispatchEvent("monetizationprogress-error");
         clearTimeout(monetizationProgressChecker);
+        clearTimeout(monetizationStartTimeChecker);
         monetizationStartEventChecker = false;
-        metaTagObserver.disconnect();
       }, progressErrorWatitingTime);
 
       if (vanillaCredentials.enabled) {
@@ -99,18 +100,26 @@ export const initMonetizationChecker = ({
 
   document.monetization.addEventListener("monetizationstart-error", () => {
     clearTimeout(monetizationProgressChecker);
+    clearTimeout(monetizationStartTimeChecker);
     monetizationStartEventChecker = false;
-    metaTagObserver.disconnect();
   });
 
   const onMetaTagAdded = () => {
-    setTimeout(() => {
+    monetizationStartTimeChecker = setTimeout(() => {
       if (!monetizationStartEventChecker) {
         dispatchEvent("monetizationstart-error");
       }
     }, startErrorWaitingTime);
   };
-  const metaTagObserver = observeMetaTagMutations({ onAdded: onMetaTagAdded });
+  const onMetaTagRemoved = () => {
+    clearTimeout(monetizationProgressChecker);
+    clearTimeout(monetizationStartTimeChecker);
+    monetizationStartEventChecker = false;
+  };
+  observeMetaTagMutations({
+    onAdded: onMetaTagAdded,
+    onRemoved: onMetaTagRemoved,
+  });
 
   return {
     vanillaCredentials,

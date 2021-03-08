@@ -74,6 +74,13 @@ document.addEventListener(
     });
 
     if (document.monetization) {
+      const handler = {
+        set: function (obj, prop, value) {
+          console.log(obj, prop, value);
+        },
+      };
+      var p = new Proxy(document.monetization, handler);
+      console.log(p);
       document.monetization.addEventListener("monetizationstart", () => {
         console.log("monetizationstart");
       });
