@@ -1,6 +1,6 @@
 {
   "name": "web-monetisation-video-ads",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
