@@ -9,7 +9,7 @@ npm install web-monetization-video-ads --save
 ```
 ## Set Up and Usage
 
-The package exposes 3 submodules:
+The package exposes 3 functions:
 
 -  `initVideoMonetizer` for monetize the video element usign [web monetization API](https://webmonetization.org/).
 
@@ -53,7 +53,7 @@ Launches `initVideoAdvertizer` when `document.monetization` is not present in th
 
 ### Others Modules In Depth
 
-#### initVideoMonetizer
+#### VideoMonetizer
 
 It's main purpose is to start and stop web monetization whenever a video is playing or pausing.
 ```
@@ -109,7 +109,7 @@ document.monetization.addEventListener("monetizationstart-error", function(){
 ```
 `webMonetizationFaker.js`used also in test for mocking the web monetization api.
 
-#### initVideoAdvertizer
+#### VideoAdvertizer
 
 It  initializing and playing the ads and also exposes`stopAds` for stopping them when needed.
 ```

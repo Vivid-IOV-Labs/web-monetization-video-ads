@@ -430,10 +430,10 @@ const onAdEvent = (adEvent) => {
         }, context.interval * 1000);
 
         context.videoElement.addEventListener("pause", () => {
-          context.liveAdsTimeout.pause();
+          context.liveAdsTimeout && context.liveAdsTimeout.pause();
         });
         context.videoElement.addEventListener("play", () => {
-          context.liveAdsTimeout.resume();
+          context.liveAdsTimeout && context.liveAdsTimeout.resume();
         });
       }
       break;
