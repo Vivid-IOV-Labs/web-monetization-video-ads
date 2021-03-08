@@ -2,6 +2,7 @@ import {
   observeMetaTagMutations,
   getPointerFromMetaTag,
 } from "./webMonetizationHelper";
+import EventTarget from "@ungap/event-target";
 
 const createEvents = ({
   paymentPointer = "",

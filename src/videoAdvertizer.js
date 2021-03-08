@@ -1,5 +1,4 @@
-import { EventTarget, Event } from "event-target-shim";
-
+import EventTarget from "@ungap/event-target";
 /* eslint-disable no-undef */
 const imaSdkUrl = "//imasdk.googleapis.com/js/sdkloader/ima3.js";
 
