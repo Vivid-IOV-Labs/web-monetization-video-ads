@@ -1,31 +1,9 @@
-import {
-  // stopMonetization,
-  observeMetaTagMutations,
-} from "./webMonetizationHelper";
+import { observeMetaTagMutations } from "./webMonetizationHelper";
 import { getContentProof } from "./vanillaVerification";
 import { verifyReceipt } from "./receiptVerifier";
-import { EventTarget, Event } from "event-target-shim";
-
-/**
-   * Events
-  monetizationstart-error
-  monetizationprogress-error
-  
-  monetizationproof
-  monetizationproof-error
-  
-  monetizationreceipt
-  monetizationreceipt-error
-   */
-
-export const videoMonetizer = new EventTarget();
 
 const dispatchEvent = (name, payload = null) => {
-  const event = new Event(name, { detail: payload });
-  videoMonetizer.dispatchEvent(event);
-  /**
-   * Extends to document monetization
-   */
+  const event = new CustomEvent(name, { detail: payload });
   if (document.monetization) document.monetization.dispatchEvent(event);
 };
 

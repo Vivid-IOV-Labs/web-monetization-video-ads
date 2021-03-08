@@ -4,10 +4,7 @@ import {
   isWebMonetized,
 } from "./webMonetizationHelper";
 import { initFakeMonetization } from "./webMonetizationFaker";
-import {
-  initMonetizationChecker,
-  videoMonetizer,
-} from "./webMonetizationChecker";
+import { initMonetizationChecker } from "./webMonetizationChecker";
 import { createVanillaPaymentPointer } from "./vanillaVerification";
 import { cretatePaymentPointerWithReceipt } from "./receiptVerifier";
 import { isInactiveActiveTab } from "./isInactiveActiveTab";
@@ -94,7 +91,6 @@ export const initVideoMonetizer = ({
   }
 
   return {
-    emitter: videoMonetizer,
     context: { videoElement, paymentPointer, receiptVerify, fakeMonetization },
   };
 };
