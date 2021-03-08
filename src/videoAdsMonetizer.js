@@ -46,6 +46,14 @@ export const initVideoAdsMonetizer = ({
         stopAds();
       }
     });
+    document.monetization.addEventListener("monetizationstart", () => {
+      if (checkMonetizationRestart) {
+        clearTimeout(checkMonetizationRestart);
+      }
+      if (context.hasPlayed) {
+        stopAds();
+      }
+    });
   }
 
   return { videoMonetizer, videoAdvertizer };
