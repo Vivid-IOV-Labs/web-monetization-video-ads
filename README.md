@@ -110,6 +110,8 @@ document.monetization.addEventListener("monetizationstart-error", function(){
 ```
 `webMonetizationFaker.js`used also in test for mocking the web monetization api.
 
+`webMonetizationHelper.js` some helper functions to start/stop monetization, retrieve the payment pointer in the metatag and observe its mutations.
+
 #### VideoAdvertizer
 
 It  initializing and playing the ads and also exposes`stopAds` for stopping them when needed.
