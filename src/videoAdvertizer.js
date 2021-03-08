@@ -259,7 +259,7 @@ const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
   adsRequest.nonLinearAdSlotWidth = videoElement.clientWidth;
   adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
   adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
-  adsRequest.vastLoadTimeout = 10000;
+  adsRequest.vastLoadTimeout = 24000;
   adsRequest.setAdWillAutoPlay(true);
   adsRequest.setAdWillPlayMuted(!videoElement.muted);
   return adsRequest;
@@ -433,7 +433,7 @@ const onAdEvent = (adEvent) => {
           context.liveAdsTimeout && context.liveAdsTimeout.pause();
         });
         context.videoElement.addEventListener("play", () => {
-          context.liveAdsTimeoutx && context.liveAdsTimeout.resume();
+          context.liveAdsTimeout && context.liveAdsTimeout.resume();
         });
       }
       break;
