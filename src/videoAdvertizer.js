@@ -34,11 +34,6 @@ function initialContext() {
 
 export let context = initialContext();
 
-const videoAdvertizer = {
-  emitter,
-  context,
-};
-
 function initAds({
   videoElement,
   tagUrl,
@@ -80,42 +75,25 @@ function initAds({
   });
 }
 
-export function initVideoAdvertizer({ videoElement, tagUrl, live, interval }) {
-  initAdsAndAttachStartHandler({ videoElement, tagUrl, live, interval });
-
-  return videoAdvertizer;
+function startAds() {
+  emitter.addEventListener("adsmanager-loaded", () => {
+    if (!context.hasAllCompleted) {
+      if (context.videoElement.paused) {
+        context.videoElement.addEventListener(
+          "play",
+          (event) => {
+            playAds(event);
+          },
+          { once: true }
+        );
+      } else {
+        playAds();
+      }
+    }
+  });
 }
 
-function initAdsAndAttachStartHandler({
-  videoElement,
-  tagUrl,
-  live,
-  interval,
-}) {
-  initAds({ videoElement, tagUrl, live, interval })
-    .then(() => {
-      emitter.addEventListener("adsmanager-loaded", () => {
-        if (!context.hasAllCompleted) {
-          if (videoElement.paused) {
-            videoElement.addEventListener(
-              "play",
-              (event) => {
-                playAds(event);
-              },
-              { once: true }
-            );
-          } else {
-            playAds();
-          }
-        }
-      });
-    })
-    .catch((err) => {
-      errorHandler(err);
-    });
-}
-
-export function stopAds() {
+function stopAds() {
   const { live, liveAdsTimeout, videoElement, hasPlayed } = context;
   if (live || hasPlayed) {
     clearTimeout(liveAdsTimeout);
@@ -458,4 +436,14 @@ function Timer(callback, delay) {
   };
 
   this.resume();
+}
+
+export async function initVideoAdvertizer({
+  videoElement,
+  tagUrl,
+  live,
+  interval,
+}) {
+  await initAds({ videoElement, tagUrl, live, interval });
+  return { startAds, stopAds, emitter, context };
 }

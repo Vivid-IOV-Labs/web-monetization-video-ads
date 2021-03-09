@@ -1,8 +1,8 @@
-import { initVideoAdvertizer, stopAds, context } from "./videoAdvertizer";
+import { initVideoAdvertizer } from "./videoAdvertizer";
 import { initVideoMonetizer } from "./videoMonetizer";
 import { isWebMonetized } from "./webMonetizationHelper";
 
-export const initVideoAdsMonetizer = ({
+export const initVideoAdsMonetizer = async ({
   videoElement,
   startAdsTime = 4000,
   adsConfig,
@@ -13,17 +13,22 @@ export const initVideoAdsMonetizer = ({
     videoElement,
   });
 
-  let videoAdvertizer;
+  const videoAdvertizer = await initVideoAdvertizer({
+    ...adsConfig,
+    videoElement,
+  });
+
+  const { startAds, stopAds, context } = videoAdvertizer;
 
   if (!isWebMonetized()) {
-    videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
+    startAds();
   } else {
     let checkMonetizationRestart = null;
     let attemptOccurred = false;
     const attemptAdsStart = () => {
       if (!videoElement.paused && !attemptOccurred) {
         checkMonetizationRestart = setTimeout(() => {
-          videoAdvertizer = initVideoAdvertizer({ ...adsConfig, videoElement });
+          startAds();
           attemptOccurred = true;
         }, startAdsTime);
       }

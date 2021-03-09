@@ -1,11 +1,6 @@
-import { initVideoAdvertizer, stopAds, context } from "./videoAdvertizer";
+import { initVideoAdvertizer } from "./videoAdvertizer";
 import { initVideoMonetizer } from "./videoMonetizer";
 import { initVideoAdsMonetizer } from "./videoAdsMonetizer";
 import "custom-event-polyfill";
-const videoAdvertizer = {
-  initVideoAdvertizer,
-  stopAds,
-  context,
-};
 
-export { videoAdvertizer, initVideoMonetizer, initVideoAdsMonetizer };
+export { initVideoAdvertizer, initVideoMonetizer, initVideoAdsMonetizer };
