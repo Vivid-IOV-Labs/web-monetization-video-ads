@@ -34,8 +34,8 @@ document.addEventListener(
         fakeMonetization: {
           enabled: true,
           triggerFail: {
-            onStart: false,
-            onProgress: true,
+            onStart: true,
+            onProgress: false,
             timeout: 8000,
           },
         },
