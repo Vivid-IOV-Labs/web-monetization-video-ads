@@ -16,7 +16,7 @@ export default [
         babelHelpers: "bundled",
         exclude: "node_modules/**",
       }),
-      terser(),
+      terser({ safari10: true }),
     ],
     output: {
       file: `dist/${pkg.name}.min.js`,
