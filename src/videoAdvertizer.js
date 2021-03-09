@@ -7,6 +7,8 @@ const emitter = new EventTarget();
 function initialContext() {
   return {
     adDisplayContainerisInitialized: false,
+    isAutoPlay: false,
+    isPlaysInline: false,
     hasPlayed: false,
     hasAllCompleted: false,
     isPlaying: false,
@@ -52,10 +54,15 @@ function initAds({
         );
         google.ima.settings.setLocale(lang);
 
-        const isPlaysInline = !![...videoElement.attributes].find(
+        context.isPlaysInline = !![...videoElement.attributes].find(
           ({ name }) => name === "playsinline"
         );
-        google.ima.settings.setDisableCustomPlaybackForIOS10Plus(isPlaysInline);
+        context.isAutoPlay = !![...videoElement.attributes].find(
+          ({ name }) => name === "autoplay"
+        );
+        google.ima.settings.setDisableCustomPlaybackForIOS10Plus(
+          context.isPlaysInline
+        );
 
         context.adContainer = createAdContainerRef(videoElement);
         context.adDisplayContainer = createDisplayer({
@@ -213,6 +220,7 @@ const createDisplayer = ({ adContainer, videoElement }) => {
 
 const createLoader = ({ videoElement, adDisplayContainer }) => {
   const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+  adsLoader.getSettings().setAutoPlayAdBreaks(false);
   videoElement.addEventListener("ended", () => {
     adsLoader.contentComplete();
   });
@@ -238,6 +246,7 @@ const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
   adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
   adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
   adsRequest.vastLoadTimeout = 24000;
+  adsRequest.setAdWillAutoPlay(context.isAutoPlay);
   adsRequest.setAdWillPlayMuted(!videoElement.muted);
   return adsRequest;
 };
