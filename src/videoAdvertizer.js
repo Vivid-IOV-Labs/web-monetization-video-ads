@@ -76,7 +76,6 @@ function initAds({
 }
 
 export function startAds() {
-  console.log("called");
   emitter.addEventListener("adsmanager-loaded", () => {
     if (!context.hasAllCompleted) {
       if (context.videoElement.paused) {
@@ -214,7 +213,6 @@ const createDisplayer = ({ adContainer, videoElement }) => {
 
 const createLoader = ({ videoElement, adDisplayContainer }) => {
   const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-  adsLoader.getSettings().setAutoPlayAdBreaks(false);
   videoElement.addEventListener("ended", () => {
     adsLoader.contentComplete();
   });
@@ -240,7 +238,6 @@ const createRequest = ({ tagUrl, videoElement, liveStreamPrefetchSeconds }) => {
   adsRequest.nonLinearAdSlotHeight = videoElement.clientHeight / 3;
   adsRequest.liveStreamPrefetchSeconds = liveStreamPrefetchSeconds;
   adsRequest.vastLoadTimeout = 24000;
-  adsRequest.setAdWillAutoPlay(true);
   adsRequest.setAdWillPlayMuted(!videoElement.muted);
   return adsRequest;
 };
