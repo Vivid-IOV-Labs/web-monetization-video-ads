@@ -75,7 +75,8 @@ function initAds({
   });
 }
 
-function startAds() {
+export function startAds() {
+  console.log("called");
   emitter.addEventListener("adsmanager-loaded", () => {
     if (!context.hasAllCompleted) {
       if (context.videoElement.paused) {

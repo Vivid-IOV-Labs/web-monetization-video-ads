@@ -22,6 +22,7 @@ export const initVideoAdsMonetizer = async ({
 
   if (!isWebMonetized()) {
     startAds();
+    console.log("start ads");
   } else {
     let checkMonetizationRestart = null;
     let attemptOccurred = false;
