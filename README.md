@@ -133,7 +133,10 @@ const videoAdvertizer = initVideoAdvertizer(adsConfig);
 -  `interval` includes both of the submodules to provide web monetization and
 
 ## Issues
-- Mobile or MultiVideos are not yet supported or tested. 
+- MultiVideos are not yet supported or tested. 
+## Not Supported
+- Not supported for Safari < 10 or IE11 
+- On iPhone the video must have a `playinsline` and `muted` attributes
 ## License
 
 This project uses the following license: [MIT License](https://github.com/Vivid-IOV-Labs/web-monetisation-video-ads/blob/main/LICENSE.md).
