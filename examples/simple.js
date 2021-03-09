@@ -23,33 +23,6 @@ const tagUrl =
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-    // const startMonetization = (paymentPointer) => {
-    //   const monetizationTag = document.querySelector(
-    //     'meta[name="monetization"]'
-    //   );
-    //   if (!monetizationTag) {
-    //     const monetizationTag = document.createElement("meta");
-    //     monetizationTag.name = "monetization";
-    //     monetizationTag.content = paymentPointer;
-    //     document.head.appendChild(monetizationTag);
-    //   }
-    // };
-
-    // const stopMonetization = () => {
-    //   const monetizationTag = document.querySelector(
-    //     'meta[name="monetization"]'
-    //   );
-    //   console.log(monetizationTag);
-    //   if (monetizationTag) monetizationTag.remove();
-    // };
-    // setTimeout(() => {
-    //   console.log("start");
-    //   startMonetization();
-    // }, 4000);
-    // setTimeout(() => {
-    //   console.log("stop");
-    //   stopMonetization();
-    // }, 20000);
     const videoElement = document.querySelector("video");
 
     initVideoAdsMonetizer({
@@ -59,11 +32,11 @@ document.addEventListener(
         paymentPointer,
         receiptVerify,
         fakeMonetization: {
-          enabled: false,
+          enabled: true,
           triggerFail: {
             onStart: false,
             onProgress: true,
-            timeout: 6000,
+            timeout: 8000,
           },
         },
       },

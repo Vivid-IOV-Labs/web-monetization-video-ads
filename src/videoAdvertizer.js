@@ -83,6 +83,21 @@ function initAds({
 }
 
 export function startAds() {
+  if (context.adsLoader) {
+    if (!context.hasAllCompleted) {
+      if (context.videoElement.paused) {
+        context.videoElement.addEventListener(
+          "play",
+          (event) => {
+            playAds(event);
+          },
+          { once: true }
+        );
+      } else {
+        playAds();
+      }
+    }
+  }
   emitter.addEventListener("adsmanager-loaded", () => {
     if (!context.hasAllCompleted) {
       if (context.videoElement.paused) {

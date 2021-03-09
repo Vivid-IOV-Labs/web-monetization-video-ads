@@ -26,17 +26,23 @@ export const initVideoAdsMonetizer = async ({
     let checkMonetizationRestart = null;
     let attemptOccurred = false;
     const attemptAdsStart = () => {
+      console.log("startAds");
       if (!videoElement.paused && !attemptOccurred) {
         checkMonetizationRestart = setTimeout(() => {
+          console.log("startAds");
+
           startAds();
           attemptOccurred = true;
         }, startAdsTime);
       }
     };
     document.monetization.addEventListener("monetizationprogress-error", () => {
+      console.log("monetizationprogress-error");
       attemptAdsStart();
     });
     document.monetization.addEventListener("monetizationstart-error", () => {
+      console.log("monetizationprogress-error");
+
       attemptAdsStart();
     });
     document.monetization.addEventListener("monetizationstop", () => {
