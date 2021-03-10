@@ -46,7 +46,7 @@ function initAds({
   context = { ...context, ...{ videoElement, tagUrl, live, interval } };
   return new Promise((resolve, reject) => {
     createVideoElementWrapper(videoElement);
-    videoElement.allowFullscreen = false;
+    context.adContainer = createAdContainerRef(videoElement);
     loadScript(imaSdkUrl)
       .then(() => {
         google.ima.settings.setVpaidMode(
@@ -64,7 +64,6 @@ function initAds({
           context.isPlaysInline
         );
 
-        context.adContainer = createAdContainerRef(videoElement);
         context.adDisplayContainer = createDisplayer({
           adContainer: context.adContainer,
           videoElement,

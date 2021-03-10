@@ -24,7 +24,9 @@ document.addEventListener(
   "DOMContentLoaded",
   function () {
     const videoElement = document.querySelector("video");
-
+    videoElement.addEventListener("ended", function () {
+      videoElement.play();
+    });
     initVideoAdsMonetizer({
       videoElement,
       monetizationConfig: {
@@ -32,9 +34,9 @@ document.addEventListener(
         paymentPointer,
         receiptVerify,
         fakeMonetization: {
-          enabled: true,
+          enabled: false,
           triggerFail: {
-            onStart: true,
+            onStart: false,
             onProgress: false,
             timeout: 8000,
           },
