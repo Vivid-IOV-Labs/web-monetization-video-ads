@@ -38,41 +38,43 @@ export const initMonetizationChecker = ({
         clearTimeout(monetizationStartTimeChecker);
         monetizationStartEventChecker = false;
       }, progressErrorWatitingTime);
+      if (receipt) {
+        if (vanillaCredentials.enabled) {
+          const { clientSecret, clientId } = vanillaCredentials;
+          getContentProof({ clientId, clientSecret, requestId })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error(response);
+              }
+            })
+            .then(({ data: { proof } }) => {
+              dispatchEvent("monetizationproof", proof);
+            })
+            .catch((error) => {
+              dispatchEvent("monetizationproof-error", error);
+            });
+        }
 
-      if (vanillaCredentials.enabled) {
-        const { clientSecret, clientId } = vanillaCredentials;
-        getContentProof({ clientId, clientSecret, requestId })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error(response);
-            }
-          })
-          .then(({ data: { proof } }) => {
-            dispatchEvent("monetizationproof", proof);
-          })
-          .catch((error) => {
-            dispatchEvent("monetizationproof-error", error);
-          });
-      }
+        if (receiptVerify.enabled) {
+          const { verifyEndPoint, apiUrl, bodyParsed } = receiptVerify;
 
-      if (receiptVerify.enabled) {
-        const { verifyEndPoint, apiUrl, bodyParsed } = receiptVerify;
-        verifyReceipt({ receipt, verifyEndPoint, apiUrl, bodyParsed })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error(response);
-            }
-          })
-          .then((data) => {
-            dispatchEvent("monetizationreceipt", data);
-          })
-          .catch((error) => {
-            dispatchEvent("monetizationreceipt-error", error);
-          });
+          verifyReceipt({ receipt, verifyEndPoint, apiUrl, bodyParsed })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error(response);
+              }
+            })
+            .then((data) => {
+              dispatchEvent("monetizationreceipt", data);
+            })
+            .catch((error) => {
+              dispatchEvent("monetizationreceipt-error", error);
+            });
+        }
       }
     }
   );
