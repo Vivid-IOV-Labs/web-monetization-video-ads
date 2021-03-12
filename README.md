@@ -11,11 +11,11 @@ npm install web-monetization-video-ads --save
 
 The package exposes 3 functions:
 
--  `initVideoMonetizer` for monetize the video element usign [web monetization API](https://webmonetization.org/).
+-  `initVideoMonetizer` for monetize the video element using [web monetization API](https://webmonetization.org/).
 
--  `initVideoAdvertizer` a wrapper around [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side), used for advertizing.
+-  `initVideoAdvertizer` a wrapper around [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side), used for advertising.
 
--  `initVideoAdsMonetizer` includes both of the submodules to provide web monetization and advertizing as a fallback.
+-  `initVideoAdsMonetizer` includes both of the sub modules to provide web monetization and advertising as a fallback.
 
 ### Simple
 
@@ -91,27 +91,27 @@ This modules includes some functionalities and helper functions for the web mone
 
 ##### Config
 -  `paymentPointer` your custom payment pointer
--  `receiptVerify` it follows the [receipt verifier api standards](https://webmonetization.org/docs/receipt-verifier) to provide verfication.
+-  `receiptVerify` it follows the [receipt verifier api standards](https://webmonetization.org/docs/receipt-verifier) to provide verification.
 	- `apiUrl (default=$webmonetization.org/api/receipts`)  your custom verification url
 	- `verifyEndPoint (default='verify') `  your custom verification endpoint
-	 - If`createCustomPaymentPointer (default=false)` is set to true, it will format the `paymentPointer` as showed in the web monetization api documentation.
-	- If`bodyParsed (default=true)` is set to true will parse the `receipt` as an object property of the body call, conversely will pass it as a string.
+	 - If `createCustomPaymentPointer (default=false)` is set to true, it will format the `paymentPointer` as showed in the web monetization api documentation.
+	- If `bodyParsed (default=true)` is set to true will parse the `receipt` as an object property of the body call, conversely will pass it as a string.
 - Alternatively to verify receipts you can also use [vanilla.so](https://vanilla.so/) , by enabling  `vanillaCredentials` .
 	- `clientId` your vanilla id
 	- `clientSecret` your vanilla secret key
--  `fakeMonetization`This can be used to mock web monetization events, when developing or testing.
+-  `fakeMonetization` This can be used to mock web monetization events, when developing or testing.
 	- Within `triggerFail`  you can force web monetization error events
-		- `onStart (default=false)` set to true will trigger a`monetizationstart-error`  
+		- `onStart (default=false)` set to true will trigger a `monetizationstart-error`  
 		- `onProgress (default=false)` set to true will trigger  `monetizationprogress-error` 
 		- `timeout (default=6000)` for specifying in millisecond when to trigger  `monetizationprogress-error`.
 
-##### Furhter functionalities
+##### Further functionalities
 - `webMonetizationChecker.js` extends the web monetization with the following events listeners:
-	- `monetizationstart-error` uses the same technique in [https://testwebmonetization.com/](https://testwebmonetization.com/) for detecting when monetization doesn't start after a specific period of time. This is defined by`startErrorWaitingTime (default = 8000) ` .
-	- `monetizationprogress-error`  dispatched when `monetizationprogress` is not occurring after a specifing period of time. This is defined by`progressErrorWatitingTime (default = 6000) `.
+	- `monetizationstart-error` uses the same technique in [https://testwebmonetization.com/](https://testwebmonetization.com/) for detecting when monetization doesn't start after a specific period of time. This is defined by `startErrorWaitingTime (default = 8000) ` .
+	- `monetizationprogress-error`  dispatched when `monetizationprogress` is not occurring after a specifying period of time. This is defined by`progressErrorWatitingTime (default = 6000) `.
 	-  `receiptVerification` response:
 		- Upon success dispatches `monetizationreceipt`.
-		- Upon fail dispatches`monetizationreceipt-error` .
+		- Upon fail dispatches `monetizationreceipt-error` .
 	- `vanillaVerification` response returns :
 		- Upon success dispatches `monetizationproof`. 
 		- Upon fail dispatches `monetizationproof-error` .
@@ -124,11 +124,11 @@ document.monetization.addEventListener("monetizationstart-error", function(){
 ```
 - `webMonetizationFaker.js` this is the module that mocks web monetization api.
 
-- `webMonetizationHelper.js` some helper functions to start/stop monetization, retrieve the current payment pointer in the metatag and observe its mutations.
+- `webMonetizationHelper.js` helper functions to start/stop monetization, retrieve the current payment pointer in the metatag and observe its mutations.
 
 #### VideoAdvertizer
 
-It  inizializes and plays the video ads and also exposes `stopAds` method for stopping them when needed.
+It  initializes and plays the video ads and also exposes `stopAds` method for stopping them when needed.
 ```
 import { initVideoAdvertizer } from "web-monetization-video-ads";
 
@@ -142,7 +142,7 @@ const videoAdvertizer = initVideoAdvertizer(adsConfig);
 ```
 ##### Config
 -  `tagUrl` your custom VAST tag-url.
--  `live (default=false)` optional settings to reapeat an advert after a certain amount of time defined by `interval (default=30 sec)` .
+-  `live (default=false)` optional settings to repeat an advert after a certain amount of time defined by `interval (default=30 sec)` .
 ## Issues
 - MultiVideos are not yet supported or tested. 
 - Ad-blockers are not yet supported or tested.
