@@ -36,14 +36,7 @@ function initialContext() {
 
 export let context = initialContext();
 
-function initAds({
-  videoElement,
-  tagUrl,
-  live = false,
-  interval = 30,
-  lang = "eng",
-}) {
-  context = { ...context, ...{ videoElement, tagUrl, live, interval } };
+function initAds({ videoElement, tagUrl, lang }) {
   return new Promise((resolve, reject) => {
     createVideoElementWrapper(videoElement);
     context.adContainer = createAdContainerRef(videoElement);
@@ -462,9 +455,12 @@ function Timer(callback, delay) {
 export async function initVideoAdvertizer({
   videoElement,
   tagUrl,
-  live,
-  interval,
+  live = false,
+  interval = 30,
+  lang = "eng",
 }) {
-  await initAds({ videoElement, tagUrl, live, interval });
+  context = { ...context, ...{ videoElement, tagUrl, live, interval, lang } };
+
+  await initAds({ videoElement, tagUrl, live, interval, lang });
   return { startAds, stopAds, emitter, context };
 }
