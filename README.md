@@ -23,7 +23,7 @@ For the bare minimum set up, import`initVideoAdsMonetizer` and pass some configu
 ```
 import { initVideoAdsMonetizer } from "web-monetization-video-ads";
 
-const paymentPointer = "$your-paymentpointer";
+const paymentPointer = "$your.paymentpointer.com";
 
 const tagUrl ="your-custom-tag-url";
 
