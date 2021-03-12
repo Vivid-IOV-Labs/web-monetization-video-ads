@@ -20,7 +20,6 @@ The package exposes 3 functions:
 ### Simple
 
 For the bare minimum set up, import`initVideoAdsMonetizer` and pass some configurations as follow:
-
 ```
 import { initVideoAdsMonetizer } from "web-monetization-video-ads";
 
@@ -38,26 +37,27 @@ const config = {
 	adsConfig: {
 		tagUrl,
 	},
+	startAdsTime:4000  
 };
 
 const videoAdvertizer = initVideoAdsMonetizer(config);
 ```
--  `videoElement`  The video element you want to monetize. At this moment the library supports just one videoElement per page. You must wrap the video with a container with no other child elements in it. The container is crucial to make your [video responsive](https://css-tricks.com/fluid-width-video/)  and it’s something something out of the scope of this library. 
-
--  `monetizationConfig` Used by `initVideoMonetizer` for monetize.
-
+##### Config
+-  `videoElement`  The video element you want to monetize. At this moment the library supports just one videoElement per page. You must wrap the video with a container with no other child elements in it. The container is crucial to make your video responsive, please see an example [here](https://css-tricks.com/fluid-width-video/) . 
+-  `monetizationConfig` Used by `initVideoMonetizer` for monetizing.
 -  `adsConfig` Used by `initVideoAdvertizer` for initializing and loading ads.
-- `startAdsTime (dedfault = 4000)` Waiting time before attempting to initialize the advertising.
+- `startAdsTime (default = 4000)` Waiting time before attempting to initialize the advertising.
 
-Launches `initVideoAdvertizer` when `document.monetization` is not present in the page or some `monetization errors` occured and runs `initVideoMonetizer`in the other case.
+##### What it does
+Launches `initVideoAdvertizer` when `document.monetization` is not present in the page or if any `monetization errors` occur.  In all other cases it runs `initVideoMonetizer`.
 
-It also makes sure to run `initVideoAdvertizer` once and pause the `videoElement` on every `monetizationstop` events.
+ The `videoElement` is paused on every `monetizationstop` event.
 
-### Others Modules In Depth
+### Sub Modules
 
 #### VideoMonetizer
 
-It's main purpose is to start and stop web monetization whenever a video is playing or pausing.
+It's main purpose is to start and stop web monetization whenever a video is playing or has been paused.
 ```
 import { initVideoMonetizer } from "web-monetization-video-ads";
 
@@ -89,9 +89,13 @@ const videoMonetizer = initVideoMonetizer(monetizationConfig);
 ```
 This modules includes some functionalities and helper functions for the web monetization.
 
+##### Config
 -  `paymentPointer` your custom payment pointer
--  `receiptVerify` it follows the [receipt verifier api standards](https://webmonetization.org/docs/receipt-verifier) to provide a verfification. If you enabled it with no other configuration it will uses `$webmonetization.org/api/receipts` url as default. You can override it, with your custom `sps url`, through`apiUrl` and `verifyEndPoint`. If`createCustomPaymentPointer` is set to true, it will format the `paymentPointer` as showed in the web monetization api documentation.
-If`bodyParsed` is set to true will parse the `receipt` as an object property of the body call, conversely will pass it as a string.
+-  `receiptVerify` it follows the [receipt verifier api standards](https://webmonetization.org/docs/receipt-verifier) to provide a verfification.
+- - `apiUrl (default=$webmonetization.org/api/receipts`)  your custom verification url
+- - `verifyEndPoint (default='verify') `  your custom verification endpoint
+- - If`createCustomPaymentPointer (default=false)` is set to true, it will format the `paymentPointer` as showed in the web monetization api documentation.
+- - If`bodyParsed (default=true)` is set to true will parse the `receipt` as an object property of the body call, conversely will pass it as a string.
 -  `vanillaCredentials` you can enable [vanilla verification](https://vanilla.so/) using this configuration and passing a client and a secret key.
 -  `fakeMonetization`if enabled will fake the monetization for `developing` or `testing` mode. Within `triggerFail` you can fake a `monetizationstart-error`  event by setting `onStart` to true and a `monetizationprogress-error` event with `onProgress` set on true and  `timeout` for specifying in millisecond when to trigger it.
 
@@ -126,6 +130,7 @@ const adsConfig = {
 
 const videoAdvertizer = initVideoAdvertizer(adsConfig);
 ```
+##### Config
 -  `tagUrl` for monetize the video element usign web monetization API.
 
 -  `live` a wrapper around [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side), used for advertizing.
@@ -138,5 +143,4 @@ const videoAdvertizer = initVideoAdvertizer(adsConfig);
 - Not supported for Safari < 10 or IE11 
 - On iPhone the video must have a `playinsline` and `muted` attributes
 ## License
-
 This project uses the following license: [MIT License](https://github.com/Vivid-IOV-Labs/web-monetisation-video-ads/blob/main/LICENSE.md).
