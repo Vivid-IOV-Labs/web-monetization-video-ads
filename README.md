@@ -18,7 +18,6 @@ The package exposes 3 functions:
 -  `initVideoAdsMonetizer` includes both of the sub modules to provide web monetization and advertising as a fallback.
 
 ### Simple
-
 For the bare minimum set up, import`initVideoAdsMonetizer` and pass some configurations as follow:
 ```
 import { initVideoAdsMonetizer } from "web-monetization-video-ads";
