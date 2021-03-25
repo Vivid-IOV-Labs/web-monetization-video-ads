@@ -11,6 +11,7 @@ npm install web-monetization-video-ads --save
 
 The package exposes 3 functions:
 
+
 -  `initVideoMonetizer` for monetize the video element using [web monetization API](https://webmonetization.org/).
 
 -  `initVideoAdvertizer` a wrapper around [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side), used for advertising.
