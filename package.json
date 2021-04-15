@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vivid-IOV-Labs/web-monetisation-video-ads.git"
+    "url": "https://github.com/Vivid-IOV-Labs/web-monetization-video-ads.git"
   },
   "scripts": {
     "build": "rollup -c",
